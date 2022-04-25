@@ -1,7 +1,7 @@
 {
-  "name": "CheemsBot-MD",
+  "name": "Hermit-MD",
   "version": "1.0.0",
-  "description": "Multi device wa bot created by Xeon Bot Inc.",
+  "description": "Multi device wa bot created by hermit Bot.",
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
@@ -63,7 +63,6 @@
     "@phaticusthiccy/open-apis": "^1.8.3",
     "youtube.get-video-info": "^1.0.2",
     "ytdl-core":"latest",
-    "yt-channel-info": "^3.0.3",
     "yt-search": "^2.10.2"
   },
   "directories": {
@@ -73,10 +72,10 @@
   "devDependencies": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DGXeon/CheemsBot-MD.git"
+    "url": "git+https://github.com/Denissir/HERMIT-MDV5.git"
   },
   "bugs": {
-    "url": "https://github.com/DGXeon/CheemsBot-MD/issues"
+    "url": "https://github.com/Denissir/HERMIT-MDV5/issues"
   },
-  "homepage": "https://github.com/DGXeon/CheemsBot-MD#readme"
+  "homepage": "https://github.com/Denissir/HERMIT-MDV5#readme"
 }
