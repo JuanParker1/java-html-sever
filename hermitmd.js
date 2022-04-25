@@ -46,7 +46,6 @@ const { Primbon } = require('scrape-primbon')
 const ID3Writer = require('browser-id3-writer');
 const ytdls = require('ytdl-core');
 const yts = require("yt-search")
-const ytch = require('yt-channel-info')
 const imageToBase64 = require('image-to-base64');
 const ameClient = require("amethyste-api")
 const ameApi = new ameClient("1f486b04b157f12adf0b1fe0bd83c92a28ce768683871d2a390e25614150d0c8fa404fd01b82a5ebf5b82cbfa22e365e611c8501225a93d5d1e87f9f420eb91b")
