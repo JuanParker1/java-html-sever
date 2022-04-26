@@ -53,6 +53,7 @@ const Game = require("@phaticusthiccy/open-apis");
 const Canvacord = require('canvacord')
 const MP3Cutter = require('mp3-cutter');
 const { igDownload } = require('./lib/igdown')
+const { playstore, pinterest, igdl, igstory, igstalk, youtube } = require('./lib/hermitapi')
 const { UploadFileUgu, webp2mp4File, TelegraPh, upload } = require('./lib/uploader')
 const { toAudio, toPTT } = require('./lib/converter')
 const { Sticker, createSticker, StickerTypes } = require('wa-sticker-formatter')
@@ -382,22 +383,19 @@ message = await prepareWAMessageMedia({ image : { url: search.videos[0].thumbnai
             }
           
 if (budy.startsWith("https://www.instagram.com")) {
-  buttnm = [{
-                    "urlButton": {
-                        "displayText": 'INPUT LINK',
-                        "url": `${budy}`
-                    }
-                }, {
-                    "quickReplyButton": {
-                        "displayText": "TRY AGAIN",
-                        "id": `.insta ${budy}`
-                    }
-                }]
-   res = await igDownload(`${budy}`).catch(e => {
-ser.sendhydrabuttext(m.chat, 'Server Error', '', buttnm)
-})
-ser.sendMessage(m.chat, { video: { url: res.result.link }, quoted: setQuoted, mimetype: 'video/mp4', fileLength: 9999999999999, caption: `${res.result.desc}`})
-console.log('[ SUCCESS INSTA ]')
+  res = await igdl(`${budy}`)
+			if (res.error === 'Invalid URL or token mismatch.') return m.reply("*No media found!*")
+			m.reply(`_Sending ${res.medias.length} Media of ${res.user.username}_`)
+			for(let i of res.medias){
+			if(i.url.includes('mp4')){
+			let link = await getBuffer(i.url)
+			let igpreview = await getBuffer(i.preview)
+			ser.sendMessage(m.chat, { video: link, jpegThumbnail: igpreview }, { quoted: m })
+			} else {
+			let link = await getBuffer(i.url)
+			ser.sendMessage(m.chat, { image: link, jpegThumbnail: link }, { quoted: m })
+			}
+			}
 }
 //[Antilink]\\
 
@@ -912,6 +910,7 @@ Ciee Whats Going On💖👀`
 		if (!m.isGroup) return reply(mess.group)
                 if (!isBotAdmins) return reply(mess.botAdmin)
                 if (!isAdmins) return reply(mess.admin)
+                if(!text && !m.quoted) return reply('Enter the number you want to add')
 		let users = m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '')+'@s.whatsapp.net'
 		await ser.groupParticipantsUpdate(m.chat, [users], 'add').then((res) => reply(jsonformat(res))).catch((err) => reply(jsonformat(err)))
 	}
@@ -1383,6 +1382,7 @@ break
 			llink2 = Teks.split(';')[8]
 			
 			Link2 = llink2 === '' ? '' : llink2
+            Img1 = await getBuffer(Imglink)
             Img2 = await getBuffer(Imglink2)
             oxx = await quoted.download()
              
@@ -1448,7 +1448,7 @@ break
 		     description: '', 
 		     title: Text1,
 		     body: Text2,
-		     thumbnail: await(await fetch(Imglink)).buffer(), 
+		     thumbnail: Img1, 
 		     sourceUrl: Link2
 		     }}
 		     })
@@ -1466,7 +1466,7 @@ break
 		     description: '', 
 		     title: Text1,
 		     body: Text2,
-		     thumbnail: await(await fetch(Imglink)).buffer(), 
+		     thumbnail: Img1, 
 		     sourceUrl: Link2
 		    }}
 		    })
@@ -2451,29 +2451,42 @@ break
                 ser.sendMessage(m.chat, buttonMessage, { quoted: setQuoted })
             }
             break
-	case 'ig':
-case 'igdl':
-case 'instagram':
-case 'insta':
-if (!text) return reply('Link?')
-  butto = [{
-                    "urlButton": {
-                        "displayText": 'INPUT LINK',
-                        "url": `${text}`
-                    }
-                }, {
-                    "quickReplyButton": {
-                        "displayText": "TRY AGAIN",
-                        "id": `.insta ${text}`
-                    }
-                }]
-res = await igDownload(`${text}`).catch(e => {
-ser.sendhydrabuttext(m.chat, 'Server Error', '', butto)
-})
-url = res.result.link
-mintype = url.includes('mp4') ? 'video' : 'image'
- ser.sendMessage(m.chat, { [`${mintype}`]: { url: url }, quoted: setQuoted, caption: `${res.result.desc}`})
-                    break
+	        case 'story':
+			case 'stories':
+			if(!text) return reply('*Please Enter Username!')
+			 res = await igstory(`${text}`)
+			if (res.error === 'No media found.') return m.reply("*No media found!*")
+			m.reply(`_Sending ${res.medias.length} stories of ${res.user.username}_`)
+			for(let i of res.medias){
+			if(i.url.includes('mp4')){
+			let link = await getBuffer(i.url)
+			let igpreview = await getBuffer(i.preview)
+			ser.sendMessage(m.chat, { video: link, jpegThumbnail: igpreview }, { quoted: m })
+			} else {
+			let link = await getBuffer(i.url)
+			let igpreview = await getBuffer(i.preview)
+			ser.sendMessage(m.chat, { image: link, jpegThumbnail: igpreview }, { quoted: m })
+			}
+			}
+            break
+            case 'igdl':
+            case 'instagram':
+            case 'insta':
+            if (!text) return m.reply('*Please Enter Link!')
+			 res = await igdl(`${text}`)
+			if (res.error === 'Invalid URL or token mismatch.') return m.reply("*No media found!*")
+			m.reply(`_Sending ${res.medias.length} Media of ${res.user.username}_`)
+			for(let i of res.medias){
+			if(i.url.includes('mp4')){
+			let link = await getBuffer(i.url)
+			let igpreview = await getBuffer(i.preview)
+			ser.sendMessage(m.chat, { video: link, jpegThumbnail: igpreview }, { quoted: m })
+			} else {
+			let link = await getBuffer(i.url)
+			ser.sendMessage(m.chat, { image: link, jpegThumbnail: link }, { quoted: m })
+			}
+			}
+            break
         case 'ringtone': {
 		if (!text) return reply(`Example : ${prefix + command} black rover`)
         let { ringtone } = require('./lib/scraper')
