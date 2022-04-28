@@ -69,7 +69,20 @@ access_secret: "PQR9E04ZD60wQPgTSRRqwkBFIWEZldj0G3q7NJuR"
 });
 //[thumb]\\
 let xeon = fs.readFileSync('./media/mainpic.jpg')
+let docthumb = fs.readFileSync('./docimg.jpg')
+let menuvid = fs.readFileSync('./hermit.mp4')
 
+const date = moment.tz('Asia/Kolkata').format('DD/MM/YYYY')
+            const time = moment.tz('Asia/Kolkata').format('hh:mm')
+				let d = new Date
+				let locale = 'en'
+				let gmt = new Date(0).getTime() - new Date('1 Januari 2021').getTime()
+				const week = d.toLocaleDateString(locale, { weekday: 'long' })
+				const calender = d.toLocaleDateString(locale, {
+				day: 'numeric',
+				month: 'long',
+				year: 'numeric'
+		       })
 //[database]\\
 const antilink = JSON.parse(fs.readFileSync('./database/antilink.json'))
 mdforward = ''
@@ -241,6 +254,18 @@ var buatpesan = await generateWAMessageFromContent(from, {
   }, {})
 ser.relayMessage(id, buatpesan.message, { messageId: buatpesan.key.id })
 }
+
+const sendbuttongif = async (jid, contentText, footer, video, thumb, buttons, quoted, options) => {
+        const message = {
+            video: video, ...options,
+            gifPlayback: true, jpegThumbnail: thumb, fileLength: 9999999999999,
+            caption: contentText,
+            footer: footer,
+            templateButtons: buttons
+        }
+        ser.sendMessage(jid, message, { quoted: quoted, ...options })
+    }
+    
     const listplay = (from, title, desc, list) => {
     let template = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
                 listMessage :{
@@ -306,6 +331,127 @@ try {
             console.log(chalk.black(chalk.bgWhite('[ MESSAGE ]')), chalk.black(chalk.bgGreen(new Date)), chalk.black(chalk.bgBlue(budy || m.mtype)) + '\n' + chalk.magenta('=> From'), chalk.green(pushname), chalk.yellow(m.sender) + '\n' + chalk.blueBright('=> In'), chalk.green(m.isGroup ? pushname : 'Private Chat', m.chat))
         }
 	
+let botinfo = 
+`╭─⬣「 *INFO BOT* 」⬣
+│ *Prefix* :  ${prefix} 
+│ *Name* : ${global.botnma}
+│ *Owner* : ${global.ownernma}
+│ *Mode* : ${ser.public ? 'Public-Mode' : 'Self-Mode'}
+│ *Runtime* : ${runtime(process.uptime())}
+│ *Lib* : Baileys-Md@4.0.0
+╰─⬣`
+let menuButtons = [
+    {index: 1, urlButton: {displayText: 'GitHub!', url: 'https://github.com/HERMIT-SIR'}},
+    {index: 2, callButton: {displayText: 'Call me!', phoneNumber: '+0'}},
+    {index: 3, quickReplyButton: {displayText: 'MENU', id: '.menu'}},
+    {index: 4, quickReplyButton: {displayText: 'OWNER', id: '.owner'}},
+]
+
+let groupmenu = `╭─❒ 「 Group Menu 」 
+├ ${prefix}grouplink
+├  ${prefix}ephemeral [option]
+├  ${prefix}setgrouppp
+├  ${prefix}setname [text]
+├  ${prefix}group [option]
+├  ${prefix}editinfo [option]
+├  ${prefix}grupinfo
+├  ${prefix}add @user
+├  ${prefix}kick @user
+├  ${prefix}promote @user
+├  ${prefix}demote @user
+├  ${prefix}listonline
+├  ${prefix}antilink On/Off
+├  ${prefix}mute On/Off
+├  ${prefix}antiwame On/Off
+╰─❒`
+
+let downmenu = `╭─❒ 「 Download Menu 」
+├  ${prefix}insta [url]
+├  ${prefix}story [username]
+├  ${prefix}ytmp3 [url]
+├  ${prefix}ytmp4 [url]
+├  ${prefix}getmusic [query]
+├  ${prefix}getvideo [query]
+╰─❒`
+
+let searchmenu = `╭─❒ 「 Search Menu 」 
+├  ${prefix}play [query]
+├  ${prefix}find / whatmusic
+├  ${prefix}yts [query]
+├  ${prefix}google [query]
+├  ${prefix}gimage [query]
+├  ${prefix}pinterest [query]
+├  ${prefix}wallpaper [query]
+├  ${prefix}wiki [query]
+╰─❒`
+
+let funmenu = `╭─❒ 「 Fun Menu 」 
+├  ${prefix}couple
+├  ${prefix}mysoulmate
+├  ${prefix}math [mode]  
+╰─❒`
+
+let voicemenu = `╭─❒ 「 Voice Changer Menu 」 
+├  ${prefix}bass
+├  ${prefix}blown
+├  ${prefix}deep
+├  ${prefix}earrape
+├  ${prefix}fast
+├  ${prefix}fat
+├  ${prefix}nightcore
+├  ${prefix}reverse
+├  ${prefix}robot
+├  ${prefix}slow
+├  ${prefix}squirrel
+╰─❒`
+
+let convertmenu = `╭─❒ 「 Convert Menu 」 
+├  ${prefix}toimage
+├  ${prefix}removebg
+├  ${prefix}sticker
+├  ${prefix}emojimix
+├  ${prefix}tovideo
+├  ${prefix}togif
+├  ${prefix}tourl
+├  ${prefix}ebinary
+├  ${prefix}dbinary
+╰─❒`
+
+let miscmenu = `╭─❒ 「  Misc Menu 」 
+├  ${prefix}ping
+├  ${prefix}owner
+├  ${prefix}menu
+├  ${prefix}delete
+├  ${prefix}chatinfo
+├  ${prefix}q
+├  ${prefix}report (report bug to owner)
+╰─❒`
+
+let databasemenu = `╭─❒ 「 Database Menu 」 
+├  ${prefix}setcmd
+├  ${prefix}listcmd
+├  ${prefix}delcmd
+├  ${prefix}lockcmd
+├  ${prefix}addmsg
+├  ${prefix}listmsg
+├  ${prefix}getmsg
+├  ${prefix}delmsg
+╰─❒`
+
+let ownermenu = `╭─❒ 「 Owner Menu 」 
+├  ${prefix}chat [option]
+├  ${prefix}join [link]
+├  ${prefix}leave
+├  ${prefix}setbotpp
+├  ${prefix}block @user
+├  ${prefix}unblock @user
+├  ${prefix}bcgc
+├  ${prefix}bcall
+├  ${prefix}listpc
+├  ${prefix}listgc
+├  ${prefix}mdox
+├  ${prefix}ox
+╰─❒`
 
 //[level(incomplete, still in devment)]\\
 const levelRole = getLevelingLevel(m.sender)
@@ -1660,6 +1806,7 @@ case 'bcgc': case 'bc': case 'broadcast': {
             }
 	    break
             case 'listpc': {
+            	if (!isCreator) return reply(mess.owner)
                  let anu = await store.chats.all().filter(v => v.id.endsWith('.net')).map(v => v.id)
                  let teks = `⬣ *PERSONAL CHAT LIST*\n\nTotal Chat : ${anu.length} Chat\n\n`
                  for (let i of anu) {
@@ -1670,6 +1817,7 @@ case 'bcgc': case 'bc': case 'broadcast': {
              }
              break
                 case 'listgc': {
+                if (!isCreator) return reply(mess.owner)
                  let anu = await store.chats.all().filter(v => v.id.endsWith('@g.us')).map(v => v.id)
                  let teks = `⬣ *GROUP CHAT LIST*\n\nTotal Group : ${anu.length} Group\n\n`
                  for (let i of anu) {
@@ -1687,7 +1835,7 @@ case 'bcgc': case 'bc': case 'broadcast': {
              break
             case 'sticker': case 's': case 'stickergif': case 'sgif': {
             if (!quoted) return reply(`Reply Video/Image With Caption ${prefix + command}`)
-            replay(mess.wait)
+            reply(mess.wait)
                     if (/image/.test(mime)) {
                 let media = await quoted.download()
                 let encmedia = await ser.sendImageAsSticker(m.chat, media, m, { packname: global.packname, author: global.author })
@@ -2453,8 +2601,19 @@ break
             break
 	        case 'story':
 			case 'stories':
-			if(!text) return reply('*Please Enter Username!')
-			 res = await igstory(`${text}`)
+			if(!text && !m.quoted) return reply("*Give me a url.*")
+            textstory = m.quoted ? m.quoted.text : text
+		if (
+		      textstory === "" ||
+		      (!textstory.includes("/stories/") && textstory.startsWith("http"))
+		    )
+		      return reply("*Give me a url.*")
+			if (textstory.includes("/stories/")) {
+            s = textstory.indexOf("/stories/") + 9
+            e = textstory.lastIndexOf("/")
+            match = textstory.substring(s, e)
+            }
+			 res = await igstory(`${match}`)
 			if (res.error === 'No media found.') return m.reply("*No media found!*")
 			m.reply(`_Sending ${res.medias.length} stories of ${res.user.username}_`)
 			for(let i of res.medias){
@@ -2472,8 +2631,11 @@ break
             case 'igdl':
             case 'instagram':
             case 'insta':
-            if (!text) return m.reply('*Please Enter Link!')
-			 res = await igdl(`${text}`)
+            if(!text && !m.quoted) return reply('*Enter the link!*')
+            textig = m.quoted ? m.quoted.text : text
+            if (!textig || !/instagram.com/.test(textig))
+            return reply('*Enter the link!*')
+			 res = await igdl(`${textig}`)
 			if (res.error === 'Invalid URL or token mismatch.') return m.reply("*No media found!*")
 			m.reply(`_Sending ${res.medias.length} Media of ${res.user.username}_`)
 			for(let i of res.medias){
@@ -2995,7 +3157,7 @@ if(typemenu == 'hydradoc'){
             ser.sendBD(m.chat, context, global.botnma, 'https://telegra.ph/file/22fd84e4a3244e1b17e4e.png', [['OWNER', `${prefix}owner`], ['ALL MENU', `${prefix}allmenu`], ['LIST COMMAND', `${prefix}command`]], {                      
 		              key: {participant: `0@s.whatsapp.net`, ...(from ? { remoteJid: "status@broadcast" } : {})},message: {"videoMessage": { "title":`${global.quotedname}`, "h": `Hmm`,'seconds': '359996400', 'gifPlayback': 'true', 'caption': `${global.quotedname}`, 'jpegThumbnail': quotedimg}}},
 		               { 
-		               jpegThumbnail: await (await fetch("https://telegra.ph/file/24a7a02c2b86189c4e920.jpg")).buffer(), fileName: 'ʜᴇʀᴍɪᴛ-sᴇʀ', mimetype: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', fileLength: 9999999999999, pageCount: 999999999,
+		               jpegThumbnail: docthumb, fileName: 'ʜᴇʀᴍɪᴛ-sᴇʀ', mimetype: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', fileLength: 9999999999999, pageCount: 999999999,
 		               mentions: [m.sender],
 		               contextInfo: {
 		               externalAdReply :{
@@ -3013,7 +3175,7 @@ if(typemenu == 'hydradoc'){
                        ser.sendBI(m.chat, context, global.botnma, 'https://telegra.ph/file/22fd84e4a3244e1b17e4e.png', [['OWNER', `${prefix}owner`], ['ALL MENU', `${prefix}allmenu`], ['LIST COMMAND', `${prefix}command`]], {                      
 		              key: {participant: `0@s.whatsapp.net`, ...(from ? { remoteJid: "status@broadcast" } : {})},message: {"videoMessage": { "title":`${global.quotedname}`, "h": `Hmm`,'seconds': '359996400', 'gifPlayback': 'true', 'caption': `${global.quotedname}`, 'jpegThumbnail': quotedimg}}},
 		               { 
-		               jpegThumbnail: await (await fetch("https://telegra.ph/file/24a7a02c2b86189c4e920.jpg")).buffer(), fileLength: 9999999999999,
+		               jpegThumbnail: xeon, fileLength: 9999999999999,
 		               mentions: [m.sender],
 		               contextInfo: {
 		               externalAdReply :{
@@ -3031,25 +3193,7 @@ if(typemenu == 'hydradoc'){
                      ser.sendBV(m.chat, context, global.botnma, 'https://a.uguu.se/ksrsMuUJ.mp4', [['OWNER', `${prefix}owner`], ['ALL MENU', `${prefix}allmenu`], ['LIST COMMAND', `${prefix}command`]], {                      
 		              key: {participant: `0@s.whatsapp.net`, ...(from ? { remoteJid: "status@broadcast" } : {})},message: {"videoMessage": { "title":`${global.quotedname}`, "h": `Hmm`,'seconds': '359996400', 'gifPlayback': 'true', 'caption': `${global.quotedname}`, 'jpegThumbnail': quotedimg}}},
 		               { 
-		               jpegThumbnail: await (await fetch("https://telegra.ph/file/24a7a02c2b86189c4e920.jpg")).buffer(), fileLength: 9999999999999, seconds: 119998800,
-		               mentions: [m.sender],
-		               contextInfo: {
-		               externalAdReply :{
-		                  mediaUrl: 'https://www.instagram.com/',
-		                  mediaType: 2,
-		                  description: '', 
-		                  title: `${ser.user.name}`,
-		                  body: 'sɪᴍᴘʟᴇ ᴡʜᴀᴛsᴀᴘᴘ ʙᴏᴛ',
-		                  thumbnail: quotedimg,
-		                  sourceUrl: ''
-		              }}
-		           })
-                 }
-                 if(typemenu == 'location'){
-                    ser.sendBL(m.chat, context, global.botnma, 'https://a.uguu.se/ksrsMuUJ.mp4', [['OWNER', `${prefix}owner`], ['ALL MENU', `${prefix}allmenu`], ['LIST COMMAND', `${prefix}command`]], {                      
-		              key: {participant: `0@s.whatsapp.net`, ...(from ? { remoteJid: "status@broadcast" } : {})},message: {"videoMessage": { "title":`${global.quotedname}`, "h": `Hmm`,'seconds': '359996400', 'gifPlayback': 'true', 'caption': `${global.quotedname}`, 'jpegThumbnail': quotedimg}}},
-		               { 
-		               jpegThumbnail: await (await fetch("https://telegra.ph/file/24a7a02c2b86189c4e920.jpg")).buffer(), fileLength: 9999999999999, seconds: 119998800,
+		               jpegThumbnail: xeon, fileLength: 9999999999999, seconds: 119998800,
 		               mentions: [m.sender],
 		               contextInfo: {
 		               externalAdReply :{
@@ -3064,22 +3208,6 @@ if(typemenu == 'hydradoc'){
 		           })
                  }
              break
-case 'webp':
-clog = await generateWAMessageFromContent(m.chat, proto.Message.fromObject({
-"stickerMessage": {
-         "url": "https://mmg.whatsapp.net/d/f/ApP8WcDpaRgeYY0lnUM4dw3cLkOhWUl8NLHhF_iF7NHj.enc",
-         "fileSha256": "/sgBkID63Fb4jWtYOrnhpQbgeeWInJXhYsUo2yR1W40=",
-         "fileEncSha256": "dArJ8BOZocl70Y2kU1rJaijNQ7al+sP08mjRzxM/nDU=",
-         "mediaKey": "IxN8B0l9jasa4Lfmoil8h8OUejTDwwupcJjY8dr4nHU=",
-         "mimetype": "image/webp",
-         "height": 64,
-         "width": 64,
-         "fileLength": "1000000000000000000",
-         "isAnimated": false
-}
-}), {})
-ser.relayMessage(m.chat, clog.message, { messageId: clog.key.id })
-break
  case 'setmenu':
  if (!isCreator) return reply(mess.owner)
 typemenu = text
@@ -3091,110 +3219,91 @@ Qoted = text
 reply(mess.success)
 break
 case 'command':{
+listtext = `╭─⬡「 *INFO BOT* 」⬡
+│ *Prefix* :  ${prefix} 
+│ *Name* : ${global.botnma}
+│ *Owner* : ${global.ownernma}
+│ *Mode* : ${ser.public ? 'Public-Mode' : 'Self-Mode'}
+│ *Time* : ${time}
+│ *Date* : ${date}
+│ *Week* : ${week}
+│ *Runtime* : ${runtime(process.uptime())}
+│ *Lib* : Baileys-Md@4.0.0
+╰─⬡`
 let template = await generateWAMessageFromContent(m.chat, proto.Message.fromObject({
-                listMessage :{
-                    title: `𝒉𝑒𝑦 ${pushname}`,
-                    description: `Pʟᴇᴀsᴇ Cʜᴏᴏsᴇ Tʜᴇ Mᴇɴᴜ\n\n`,
-                    buttonText: "Menu",
-                    footerText: "_HERMIT BOT-MD_",
-                    listType: "SINGLE_SELECT",
-                    sections: [{
-								"title": "Group Features",
-								"rows": [
-									{
-										"title": "Group Features",
-										"description": "Displays The List Of Group Features",
-										"rowId": `${prefix}grupmenu`
-									}
-								]
-							},
-							{
-								"title": "Bot Features",
-								"rows": [
-									{
-										"title": "All Menu",
-										"description": "Displays The List Of All The Features!",
-										"rowId": `${prefix}allmenu`
-									},
-									{
-										"title": "Download Menu",
-										"description": "Displays The List Of Download Features",
-										"rowId": `${prefix}downloadmenu`
-									},
-									{
-										"title": "Search Menu",
-										"description": "Displays The List Of Searching Features",
-										"rowId": `${prefix}searchmenu`
-									},
-										{
-											"title": "Image Menu",
-										"description": "Displays The List Of Image Features",
-										"rowId": `${prefix}imagemenu`
-										},
-										{
-											"title": "Fun Menu",
-										"description": "Displays The List Of Fun Features",
-										"rowId": `${prefix}funmenu`
-										},
-										{
-											"title": "Convert Menu",
-										"description": "Displays The List Of Convert Features",
-										"rowId": `${prefix}convertmenu`
-										},
-										{
-										"title": "Miscellaneous Menu",
-										"description": "Displays The List Of Miscellaneous Features",
-										"rowId": `${prefix}nocategorymenu`
-										},
-										{
-											"title": "Database Menu",
-										"description": "Displays The List Of Database Features",
-										"rowId": `${prefix}databasemenu`
-										},
-										{
-											"title": "Voice Changer Menu",
-										"description": "Displays The List Of Voice Changing Features",
-										"rowId": `${prefix}voicemenu`
-										}
-								]
-							},
-							{
-								"title": "Chat with fellow users",
-								"rows": [
-									{
-										"title": "Anonymous Chat Menu",
-										"description": "Displays The List Of Anonymous Chat Features",
-										"rowId": `${prefix}anonymouschatmenu`
-									}
-								]
-							},
-							{
-								"title": "Group System",
-								"rows": [
-									{
-										"title": "System Menu",
-										"description": "Displays The List Of Group System Features",
-										"rowId": `${prefix}sistemmenu`
-									}
-								]
-							},
-							{
-								"title": "Owner",
-								"rows": [
-									{
-										"title": "Owner Menu",
-										"description": "Displays The List Of Owner Features",
-										"rowId": `${prefix}ownermenu`
-									}
-								]
-							}
-						],
-          listType: 1
-                }
-            }), {})
-            ser.relayMessage(m.chat, template.message, { messageId: template.key.id })
-            }
-            break
+listMessage :{
+title: `Hey 👋 bro ${pushname}`,
+description: listtext,
+buttonText: "Click Here",
+footerText: " ",
+listType: "SINGLE_SELECT",
+sections: 
+[{"title": "⬡─────「 1 」","rows": [{"title": "Group Menu", "rowId": `${prefix}grupmenu`}]
+},{"title": "⬡─────「 2 」","rows": [{"title": "Download Menu", "rowId": `${prefix}downloadmenu`}]
+},{"title": "⬡─────「 3 」","rows": [{"title": "Search Menu", "rowId": `${prefix}searchmenu`}]
+},{"title": "⬡─────「 4 」","rows": [{"title": "Fun Menu", "rowId": `${prefix}funmenu`}]
+},{"title": "⬡─────「 5 」","rows": [{"title": "Convert Menu", "rowId": `${prefix}convertmenu`}]
+},{"title": "⬡─────「 6 」","rows": [{"title": "Database Menu", "rowId": `${prefix}databasemenu`}]
+},{"title": "⬡─────「 7 」","rows": [{"title": "Voice Changer Menu", "rowId": `${prefix}voicemenu`}]
+},{"title": "⬡─────「 8 」","rows": [{"title": "Owner Menu", "rowId": `${prefix}ownermenu`}]
+},{"title": "⬡─────「 9 」","rows": [{"title": "Other Menu", "rowId": `${prefix}nocategorymenu`}]}],
+listType: 1
+}
+}), { userJid: m.chat, quoted: fgif })
+ser.relayMessage(m.chat, template.message, { messageId: template.key.id })
+}
+break
+case 'grupmenu':
+sendbuttongif(m.chat, `${botinfo}\n${global.readmore}\n${groupmenu}`, ' ', menuvid, xeon, menuButtons, m)
+break
+case 'downloadmenu':
+sendbuttongif(m.chat, `${botinfo}\n${global.readmore}\n${downmenu}`, ' ', menuvid, xeon, menuButtons, m)
+break 
+case 'searchmenu':
+sendbuttongif(m.chat, `${botinfo}\n${global.readmore}\n${searchmenu}`, ' ', menuvid, xeon, menuButtons, m)
+break
+case 'funmenu':
+sendbuttongif(m.chat, `${botinfo}\n${global.readmore}\n${funmenu}`, ' ', menuvid, xeon, menuButtons, m)
+break
+case 'voicemenu':
+sendbuttongif(m.chat, `${botinfo}\n${global.readmore}\n${voicemenu}`, ' ', menuvid, xeon, menuButtons, m)
+break
+case 'convertmenu':
+sendbuttongif(m.chat, `${botinfo}\n${global.readmore}\n${convertmenu}`, ' ', menuvid, xeon, menuButtons, m)
+break
+case 'nocategorymenu':
+sendbuttongif(m.chat, `${botinfo}\n${global.readmore}\n${miscmenu}`, ' ', menuvid, xeon, menuButtons, m)
+break
+case 'databasemenu':
+sendbuttongif(m.chat, `${botinfo}\n${global.readmore}\n${databasemenu}`, ' ', menuvid, xeon, menuButtons, m)
+break
+case 'ownermenu':
+sendbuttongif(m.chat, `${botinfo}\n${global.readmore}\n${ownermenu}`, ' ', menuvid, xeon, menuButtons, m)
+break
+case 'allmenu':
+listmenu = `
+${botinfo}
+${global.readmore}
+${groupmenu}
+
+${downmenu}
+
+${searchmenu}
+
+${funmenu}
+
+${voicemenu}
+
+${convertmenu}
+
+${miscmenu}
+
+${databasemenu}
+
+${ownermenu}`
+
+sendbuttongif(m.chat, listmenu, ' ', menuvid, xeon, menuButtons, m)
+break
 case 'setting':{
 if (!isCreator) return reply(mess.owner)
 let template = await generateWAMessageFromContent(m.chat, proto.Message.fromObject({
