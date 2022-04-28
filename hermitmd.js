@@ -290,7 +290,7 @@ const sendbuttongif = async (jid, contentText, footer, video, thumb, buttons, qu
         }
         
         const replay = (teks) => {
-            ser.sendMessage(m.chat, { text: teks, contextInfo:{"externalAdReply": {"title": ` ${global.botnma}`,"body": `ʜᴇʀᴍɪᴛ-ᴍᴅ`, "previewType": "PHOTO","thumbnailUrl": ``,"thumbnail": fs.readFileSync(`./media/mainpic.jpg`),"sourceUrl": "https://youtu.be/hermitser"}}}, { quoted: setQuoted})
+            ser.sendMessage(m.chat, { text: teks, contextInfo:{"externalAdReply": {"title": `${global.botnma}`,"body": `ʜᴇʀᴍɪᴛ-ᴍᴅ`, "previewType": "PHOTO","thumbnailUrl": ``,"thumbnail": fs.readFileSync(`./media/mainpic.jpg`),"sourceUrl": "https://youtu.be/hermitser"}}}, { quoted: setQuoted})
         }
 try {
             let isNumber = x => typeof x === 'number' && !isNaN(x)
