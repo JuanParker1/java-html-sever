@@ -31,6 +31,7 @@
     "crypto": "^1.0.1",
     "mp3-cutter": "^1.0.6",
     "amethyste-api": "^1.1.5",
+    "heroku-client": "^3.1.0",
     "image-to-base64": "^2.2.0",
     "file-type": "^16.5.3",
     "form-data": "^4.0.0",
@@ -43,6 +44,7 @@
     "human-readable": "^0.2.1",
     "jimp": "^0.16.1",
     "jsdom": "^16.4.0",
+    "simple-git": "^3.7.1",
     "moment-timezone": "^0.5.34",
     "wa-sticker-formatter": "^4.3.2",
     "knights-canvas": "^1.0.0",
@@ -73,10 +75,10 @@
   "devDependencies": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Denissir/HERMIT-MDV5.git"
+    "url": "git+https://github.com/template-sir/java-html-sever.git"
   },
   "bugs": {
-    "url": "https://github.com/Denissir/HERMIT-MDV5/issues"
+    "url": "https://github.com/template-sir/java-html-sever/issues"
   },
-  "homepage": "https://github.com/Denissir/HERMIT-MDV5#readme"
+  "homepage": "https://github.com/template-sir/java-html-sever#readme"
 }
