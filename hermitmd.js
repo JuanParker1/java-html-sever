@@ -46,6 +46,7 @@ const { Primbon } = require('scrape-primbon')
 const ID3Writer = require('browser-id3-writer');
 const ytdls = require('ytdl-core');
 const yts = require("yt-search")
+const Heroku = require('heroku-client');
 const imageToBase64 = require('image-to-base64');
 const ameClient = require("amethyste-api")
 const ameApi = new ameClient("1f486b04b157f12adf0b1fe0bd83c92a28ce768683871d2a390e25614150d0c8fa404fd01b82a5ebf5b82cbfa22e365e611c8501225a93d5d1e87f9f420eb91b")
@@ -67,6 +68,9 @@ host: "identify-eu-west-1.acrcloud.com",
 access_key: "c9f2fca5e16a7986b0a6c8ff70ed0a06",
 access_secret: "PQR9E04ZD60wQPgTSRRqwkBFIWEZldj0G3q7NJuR"
 });
+const simpleGit = require('simple-git');
+const git = simpleGit();
+const heroku = new Heroku({ token: global.herokuapikey })
 //[thumb]\\
 let xeon = fs.readFileSync('./media/mainpic.jpg')
 let docthumb = fs.readFileSync('./docimg.jpg')
@@ -1701,6 +1705,40 @@ break
 		    }}
 		    })
             break
+            case 'updatestart':
+                await git.fetch();
+    var commits = await git.log(['main' + '..origin/' + 'main']);
+    if (commits.total === 0) {
+        return reply("_Bot up to date_")
+
+    } else {
+        reply("_Build started_")
+
+            try {
+                var app = await heroku.get('/apps/' + global.hermit-md)
+            } catch {
+                reply"Heroku information wrong!")
+
+                await new Promise(r => setTimeout(r, 1000));
+            }
+            git.fetch('upstream', 'main');
+            git.reset('hard', ['FETCH_HEAD']);
+
+            var git_url = app.git_url.replace(
+                "https://", "https://api:" + global.herokuapikey + "@"
+            )
+            
+            try {
+                await git.addRemote('heroku', git_url);
+            } catch { console.log('heroku remote ekli'); }
+            await git.push('heroku', 'main');
+
+            await ser..sendMessage(m.chat, { text:"_Successfully updated_"})
+           await ser.sendMessage(m.chat, { text:"_Restarting_"})
+            
+        
+    }
+    break
 case 'bcgc': case 'bc': case 'broadcast': {
                 if (!isCreator) return reply(mess.owner)
                 let getGroups = await ser.groupFetchAllParticipating()
