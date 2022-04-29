@@ -1733,7 +1733,7 @@ break
             } catch { console.log('heroku remote ekli'); }
             await git.push('heroku', 'main');
 
-            await ser..sendMessage(m.chat, { text:"_Successfully updated_"})
+            await ser.sendMessage(m.chat, { text:"_Successfully updated_"})
            await ser.sendMessage(m.chat, { text:"_Restarting_"})
             
         
