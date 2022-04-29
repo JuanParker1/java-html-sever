@@ -1717,7 +1717,7 @@ break
             try {
                 var app = await heroku.get('/apps/' + global.hermit-md)
             } catch {
-                reply"Heroku information wrong!")
+                reply("Heroku information wrong!")
 
                 await new Promise(r => setTimeout(r, 1000));
             }
