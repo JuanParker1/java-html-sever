@@ -288,7 +288,7 @@ const sendbuttongif = async (jid, contentText, footer, video, thumb, buttons, qu
 //[target]\\
 	const reply = (teks) => {
 		    ser.sendPresenceUpdate('composing', m.chat)
-            ser.sendMessage(m.chat, { text: teks, contextInfo:{"externalAdReply": {"title": `${global.botnma}`,"body": `ʜᴇʀᴍɪᴛ-ᴍᴅ`, "previewType": "VIDEO","thumbnailUrl": `https://www.instagram.com/`,"thumbnail": fs.readFileSync('./XeonMedia/cheemspic.jpg'),"sourceUrl": ""}}}, { quoted: setQuoted, ephemeralExpiration: 24*60*60 })
+            ser.sendMessage(m.chat, { text: teks, contextInfo:{"externalAdReply": {"title": `${global.botnma}`,"body": `ʜᴇʀᴍɪᴛ-ᴍᴅ`, "previewType": "VIDEO","thumbnailUrl": `https://www.instagram.com/`,"thumbnail": fs.readFileSync('./media/mainpic.jpg'),"sourceUrl": ""}}}, { quoted: setQuoted, ephemeralExpiration: 24*60*60 })
 	             }
 try {
             let isNumber = x => typeof x === 'number' && !isNaN(x)
