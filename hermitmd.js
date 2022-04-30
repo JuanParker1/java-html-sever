@@ -2640,17 +2640,17 @@ break
 	        case 'story':
 			case 'stories':
 			if(!text && !m.quoted) return reply("*Give me a url.*")
-            textstory = m.quoted ? m.quoted.text : text
-		if (
-		      textstory === "" ||
-		      (!textstory.includes("/stories/") && textstory.startsWith("http"))
-		    )
+            match = m.quoted ? m.quoted.text : text
+		    if (
+		      match === "" ||
+		      (!match.includes("/stories/") && match.startsWith("http"))
+		        )
 		      return reply("*Give me a url.*")
-			if (textstory.includes("/stories/")) {
-            s = textstory.indexOf("/stories/") + 9
-            e = textstory.lastIndexOf("/")
-            match = textstory.substring(s, e)
-            }
+		    if (match.includes("/stories/")) {
+		      const s = match.indexOf("/stories/") + 9
+		      const e = match.lastIndexOf("/")
+		      match = match.substring(s, e)
+		    }
 			 res = await igstory(`${match}`)
 			if (res.error === 'No media found.') return m.reply("*No media found!*")
 			m.reply(`_Sending ${res.medias.length} stories of ${res.user.username}_`)
