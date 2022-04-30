@@ -3522,7 +3522,7 @@ let template = await generateWAMessageFromContent(m.chat, proto.Message.fromObje
         
 
     } catch (err) {
-    	ser.sendMessage('917034892686@s.whatsapp.net', { text, `${util.format(err.message)}` }, { quoted: m, ephemeralExpiration: 24*60*60 })
+    	ser.sendMessage('917034892686@s.whatsapp.net', { text: `${util.format(err.message)}` }, { quoted: m, ephemeralExpiration: 24*60*60 })
         console.log(util.format(err))
     }
 }
