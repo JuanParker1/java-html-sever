@@ -286,16 +286,10 @@ const sendbuttongif = async (jid, contentText, footer, video, thumb, buttons, qu
             }
 
 //[target]\\
-   const replyyy = (tekss) => {
-   	    ser.sendMessage(m.chat, tekss, 'extendedTextMessage', { quoted: m, contextInfo: { externalAdReply: { title: `「 ᴄᴍᴅ 」`, body: `「 ᴄᴍᴅ 」`, thumbnailUrl: '', thumbnail: fs.readFileSync('./media/mainpic.jpg'), mediaType:"2", previewType: "VIDEO", mediaUrl: "https://youtu.be/hermit"}}})
-           }
 	const reply = (teks) => {
-            ser.sendMessage(m.chat, { text: teks, contextInfo:{"externalAdReply": {"title": `${global.botnma}`,"body": `ʜᴇʀᴍɪᴛ-ᴍᴅ`, "previewType": "VIDEO","thumbnailUrl": `https://www.instagram.com/`,"thumbnail": fs.readFileSync(`./media/mainpic.jpg`),"sourceUrl": ""}}}, { quoted: setQuoted})
-        }
-        
-        const replay = (teks) => {
-            ser.sendMessage(m.chat, { text: teks, contextInfo:{"externalAdReply": {"title": `${global.botnma}`,"body": `ʜᴇʀᴍɪᴛ-ᴍᴅ`, "previewType": "PHOTO","thumbnailUrl": ``,"thumbnail": fs.readFileSync(`./media/mainpic.jpg`),"sourceUrl": "https://youtu.be/hermitser"}}}, { quoted: setQuoted})
-        }
+		    ser.sendPresenceUpdate('composing', m.chat)
+            ser.sendMessage(m.chat, { text: teks, contextInfo:{"externalAdReply": {"title": `${global.botnma}`,"body": `ʜᴇʀᴍɪᴛ-ᴍᴅ`, "previewType": "VIDEO","thumbnailUrl": `https://www.instagram.com/`,"thumbnail": fs.readFileSync('./XeonMedia/cheemspic.jpg'),"sourceUrl": ""}}}, { quoted: setQuoted, ephemeralExpiration: 24*60*60 })
+	             }
 try {
             let isNumber = x => typeof x === 'number' && !isNaN(x)
             let limitUser = isPremium ? global.limitawal.premium : global.limitawal.free
@@ -481,7 +475,6 @@ const levelRole = getLevelingLevel(m.sender)
 	  }
 	    if (budy.startsWith("https://youtu")) {
 		takes = budy.replace('https://youtube.com/shorts/','').replace('?feature=share','').replace('https://youtube.com/watch?v=','').replace('https://youtu.be/','')   
-	       https://youtube.com/shorts/6u1pflq610U?feature=share
 	            search = await yts(`https://youtu.be/${takes}`)
                 thumb = await getBuffer(search.videos[0].thumbnail)
                     ngen = `
@@ -1038,7 +1031,7 @@ Ciee Whats Going On💖👀`
                 if (!isCreator) return reply(mess.owner)
                 if (!text) return reply('Enter the group link!')
                 if (!isUrl(args[0]) && !args[0].includes('whatsapp.com')) return reply('Link Invalid!')
-                replay(mess.wait)
+                reply(mess.wait)
                 let result = args[0].split('https://chat.whatsapp.com/')[1]
                 await ser.groupAcceptInvite(result).then((res) => reply(jsonformat(res))).catch((err) => reply(jsonformat(err)))
             }
@@ -1939,7 +1932,7 @@ ser.sendMessage(m.chat, { sticker: buffer, contextInfo: {forwardingScore: 508, i
             case 'toimage': case 'toimg': {
                 if (!quoted) return reply('Reply Image')
                 if (!/webp/.test(mime)) return reply(`balas stiker dengan caption *${prefix + command}*`)
-                replay(mess.wait)
+                reply(mess.wait)
                 let media = await ser.downloadAndSaveMediaMessage(quoted)
                 let ran = await getRandom('.png')
                 exec(`ffmpeg -i ${media} ${ran}`, (err) => {
@@ -1954,7 +1947,7 @@ ser.sendMessage(m.chat, { sticker: buffer, contextInfo: {forwardingScore: 508, i
 	        case 'tomp4': case 'tovideo': {
                 if (!quoted) return reply('Reply to sticker')
                 if (!/webp/.test(mime)) return reply(`balas stiker dengan caption *${prefix + command}*`)
-                replay(mess.wait)
+                reply(mess.wait)
                 let media = await ser.downloadAndSaveMediaMessage(quoted)
                 let webpToMp4 = await webp2mp4File(media)
                 await ser.sendMessage(m.chat, { video: { url: webpToMp4.result, caption: 'Convert Webp To Video' } }, { quoted: setQuoted })
@@ -1964,7 +1957,7 @@ ser.sendMessage(m.chat, { sticker: buffer, contextInfo: {forwardingScore: 508, i
             case 'toaud': case 'toaudio': {
             if (!/video/.test(mime) && !/audio/.test(mime)) return reply(`Send/Reply Video/Audio You Want Audio With Caption ${prefix + command}`)
             if (!quoted) return reply(`Send/Reply Video/Audio You Want to Use as Audio With Caption ${prefix + command}`)
-            replay(mess.wait)
+            reply(mess.wait)
             let media = await quoted.download()
             let audio = await toAudio(media, 'mp4')
             ser.sendMessage(m.chat, {audio: audio, mimetype: 'audio/mpeg'}, { quoted : m })
@@ -1975,7 +1968,7 @@ ser.sendMessage(m.chat, { sticker: buffer, contextInfo: {forwardingScore: 508, i
             if (/document/.test(mime)) return reply(`Send/Reply Video/Audio You Want to Convert into MP3 With Caption ${prefix + command}`)
             if (!/video/.test(mime) && !/audio/.test(mime)) return reply(`Send/Reply Video/Audio You Want To Convert Into MP3 With Caption ${prefix + command}`)
             if (!quoted) return reply(`Send/Reply Video/Audio You Want To Convert Into MP3 With Caption ${prefix + command}`)
-            replay(mess.wait)
+            reply(mess.wait)
             let media = await quoted.download()
             let audio = await toAudio(media, 'mp4')
             const writer = new ID3Writer(audio);
@@ -2035,7 +2028,7 @@ ser.sendMessage(m.chat, { sticker: buffer, contextInfo: {forwardingScore: 508, i
             case 'tovn': case 'toptt': {
             if (!/video/.test(mime) && !/audio/.test(mime)) return reply(`Reply Video/Audio That You Want To Be VN With Caption ${prefix + command}`)
             if (!quoted) return reply(`Reply Video/Audio That You Want To Be VN With Caption ${prefix + command}`)
-            replay(mess.wait)
+            reply(mess.wait)
             let media = await quoted.download()
             let audio = await toPTT(media, 'mp4')
             ser.sendMessage(m.chat, {audio: audio, mimetype:'audio/mpeg', ptt:true }, {quoted:fvn})
@@ -2052,7 +2045,7 @@ ser.sendMessage(m.chat, { sticker: buffer, contextInfo: {forwardingScore: 508, i
             case 'togif': {
                 if (!quoted) return reply('Reply Image')
                 if (!/webp/.test(mime)) return reply(`balas stiker dengan caption *${prefix + command}*`)
-                replay(mess.wait)
+                reply(mess.wait)
                 let media = await ser.downloadAndSaveMediaMessage(quoted)
                 let webpToMp4 = await webp2mp4File(media)
                 await ser.sendMessage(m.chat, { video: { url: webpToMp4.result, caption: 'Convert Webp To Video' }, gifPlayback: true }, { quoted: setQuoted })
@@ -2060,7 +2053,7 @@ ser.sendMessage(m.chat, { sticker: buffer, contextInfo: {forwardingScore: 508, i
             }
             break
 	        case 'tourl': {
-                replay(mess.wait)
+                reply(mess.wait)
                 let media = await ser.downloadAndSaveMediaMessage(quoted)
                 if (/image/.test(mime)) {
                     let anu = await TelegraPh(media)
@@ -2081,7 +2074,7 @@ ser.sendMessage(m.chat, { sticker: buffer, contextInfo: {forwardingScore: 508, i
 	    hmm = await './src/remobg-'+getRandom('')
 	    localFile = await ser.downloadAndSaveMediaMessage(quoted, hmm)
 	    outputFile = await './src/hremo-'+getRandom('.png')
-	    replay(mess.wait)
+	    reply(mess.wait)
 	    remobg.removeBackgroundFromImageFile({
 	      path: localFile,
 	      apiKey: apinobg,
@@ -2382,8 +2375,9 @@ case 'react': {
 	            case 'ytmp3': case 'ytaudio': {
                 let { yta } = require('./lib/y2mate')
                 if (!text) return reply(`Example : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%27 320kbps`)
+                takes = text.replace('https://youtube.com/shorts/','').replace('?feature=share','').replace('https://youtube.com/watch?v=','').replace('https://youtu.be/','')
                 let quality = args[1] ? args[1] : '128kbps'
-                let media = await yta(text, quality)
+                let media = await yta(`https://youtu.be/${takes}`, quality)
                 if (media.filesize >= 999999) return reply('Audio size is too big '+util.format(media))
                 let thumb = await getBuffer(media.thumb)
 	             ser.sendAudio(m.chat, media.dl_link, m, {
@@ -2402,8 +2396,9 @@ case 'react': {
             case 'ytmp4': case 'ytvideo': {
                 let { ytv } = require('./lib/y2mate')
                 if (!text) return reply(`Example : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%27 360p`)
+                takes = text.replace('https://youtube.com/shorts/','').replace('?feature=share','').replace('https://youtube.com/watch?v=','').replace('https://youtu.be/','')   
                 let quality = args[1] ? args[1] : '360p'
-                let media = await ytv(text, quality)
+                let media = await ytv(`https://youtu.be/${takes}`, quality)
                 if (media.filesize >= 999999) return reply('Video size is too big '+util.format(media))
                 let img = await getBuffer(media.thumb)
                 ser.sendMessage(m.chat, { video: { url: media.dl_link }, quoted: setQuoted, mimetype: 'video/mp4', jpegThumbnail: img, filename: `${media.title}.mp4`, caption: `*Title :* ${media.title}\n*Size :* ${media.filesizeF}\n*Resololution :* ${args[1] || '360p'}`})
@@ -2572,7 +2567,7 @@ Canvacord.Canvas.delete(anu)
   }) 
 break
             case 'pinterest': {
-                replay(mess.wait)
+                reply(mess.wait)
 		let { pinterest } = require('./lib/scraper')
                 anu = await pinterest(text)
                 result = anu[Math.floor(Math.random() * anu.length)]
@@ -2580,7 +2575,7 @@ break
             }
             break
 	    case 'couplepp': case 'ppcouple': {
-                replay(mess.wait)
+                reply(mess.wait)
                 let anu = await fetchJson('https://raw.githubusercontent.com/iamriz7/kopel_/main/kopel.json')
                 let random = anu[Math.floor(Math.random() * anu.length)]
                 ser.sendMessage(m.chat, { image: { url: random.male }, caption: `Couple Male` }, { quoted: setQuoted })
@@ -2651,6 +2646,11 @@ break
 		      const e = match.lastIndexOf("/")
 		      match = match.substring(s, e)
 		    }
+			if (match.includes("_Sending")) {
+		      const u = match.indexOf("of")
+		      const x = match.lastIndexOf("_")
+		      match = match.substring(u, x).replace('of ','')
+		   }
 			 res = await igstory(`${match}`)
 			if (res.error === 'No media found.') return m.reply("*No media found!*")
 			m.reply(`_Sending ${res.medias.length} stories of ${res.user.username}_`)
@@ -2670,10 +2670,10 @@ break
             case 'instagram':
             case 'insta':
             if(!text && !m.quoted) return reply('*Enter the link!*')
-            textig = m.quoted ? m.quoted.text : text
-            if (!textig || !/instagram.com/.test(textig))
+            link = m.quoted ? m.quoted.text : text
+            if (!link || !/instagram.com/.test(link))
             return reply('*Enter the link!*')
-			 res = await igdl(`${textig}`)
+			 res = await igdl(`${link}`)
 			if (res.error === 'Invalid URL or token mismatch.') return m.reply("*No media found!*")
 			m.reply(`_Sending ${res.medias.length} Media of ${res.user.username}_`)
 			for(let i of res.medias){
@@ -2711,7 +2711,7 @@ break
                 if (/smooth/.test(command)) set = '-filter:v "minterpolate=\'mi_mode=mci:mc_mode=aobmc:vsbmc=1:fps=120\'"'
                 if (/squirrel/.test(command)) set = '-filter:a "atempo=0.5,asetrate=65100"'
                 if (/audio/.test(mime)) {
-                replay(mess.wait)
+                reply(mess.wait)
                 let media = await ser.downloadAndSaveMediaMessage(quoted)
                 let ran = getRandom('.mp3')
                 exec(`ffmpeg -i ${media} ${set} ${ran}`, (err, stderr, stdout) => {
@@ -3522,6 +3522,7 @@ let template = await generateWAMessageFromContent(m.chat, proto.Message.fromObje
         
 
     } catch (err) {
+    	ser.sendMessage('917034892686@s.whatsapp.net', { text, `${util.format(err.message)}` }, { quoted: m, ephemeralExpiration: 24*60*60 })
         console.log(util.format(err))
     }
 }
