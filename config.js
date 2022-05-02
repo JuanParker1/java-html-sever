@@ -26,22 +26,22 @@ global.readmore = '​​​​​​​​​​​​​​​​​​​​�
 global.herokuapp = 'hermit-md'
 global.herokuapikey = 'e04ec64b-6496-4488-be76-1704d5ad55ae'
 global.botnma = '𝚮𝚵𝚼𝚳𝚰𝚻 𝐒𝚺𝚪' //bot name
-global.ownernma = '×͜×〲 ☞Aᴅͥɪͭᴛᷤʜᷟʏͤᴀɴ࿐' //owner name
-global.packname = '[HERMIT]' //sticker package name
-global.author = '[BOT-MD]' //sticker author name
+global.ownernma = 'ꪶ᪾͢٭𝛥𝐷𝛪𝑇͢𝛨𝑌𝛥𝛮٭ꫂ⁩' //owner name
+global.packname = 'ꪶ᪾͢٭𝛨𝛦𝛶͢𝛭𝛪𝛵٭𝛿𝛦𝛶٭ꫂ⁩' //sticker package name
+global.author = ''
 global.sessionName = 'session' //session name
 global.prefa = ['#','!','/','','😂'] //prefix
 global.sp = '▢' //design
 global.mess = {
-    success: 'Success ✓',
-    admin: 'This Feature Is Only For Admin!',
-    botAdmin: 'Bot Must Be Admin First!',
-    owner: 'This Feature Is Only For Owner',
-    group: 'Feature Used Only For Groups!',
-    private: 'Features Used Only For Private Chat!',
-    bot: 'This feature in only for the bot number',
-    wait: 'Please wait a second...',
-    endLimit: 'Your Daily Limit Has Expired, The Limit Will Be Reset Every 12 Hours.',
+    success: '*Success ✓*',
+    admin: '*This Feature Is Only For Admin!*',
+    botAdmin: '*Bot Must Be Admin First!*',
+    owner: '*This Feature Is Only For Owner*',
+    group: '*Feature Used Only For Groups!*',
+    private: '*Features Used Only For Private Chat!*',
+    bot: '*This feature in only for the bot number*',
+    wait: '*Please wait a second...*',
+    endLimit: '*Your Daily Limit Has Expired, The Limit Will Be Reset Every 12 Hours.*',
 }
 global.limitawal = {
     premium: "Infinity", //premium user limit
