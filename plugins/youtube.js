@@ -181,7 +181,7 @@ let quality = args[1] ? args[1] : '360p'
 let media = await ytv(`https://youtu.be/${takes}`, quality)
 if (media.filesize >= 999999) return reply('Video size is too big '+util.format(media))
 let img = await getBuffer(media.thumb)
-ser.sendMessage(m.chat, { video: { url: media.dl_link }, quoted: setQuoted, mimetype: 'video/mp4', jpegThumbnail: img, filename: `${media.title}.mp4`, caption: `*Title :* ${media.title}\n*Size :* ${media.filesizeF}\n*Resololution :* ${args[1] || '360p'}`})
+ser.sendMessage(m.chat, { video: { url: media.dl_link }, quoted: m, mimetype: 'video/mp4', jpegThumbnail: img, filename: `${media.title}.mp4`, caption: `*Title :* ${media.title}\n*Size :* ${media.filesizeF}\n*Resololution :* ${args[1] || '360p'}`})
 }
 break
 case 'getmusic': {
@@ -195,7 +195,7 @@ let quality = args[1] ? args[1] : '320kbps'
 let media = await yta(urls[text - 1], quality)
 if (media.filesize >= 999999) return reply('Audio size is too big '+util.format(media))
 ser.sendImage(m.chat, media.thumb, `⬡ Title : ${media.title}\n⬡ File Size : ${media.filesizeF}\n⬡ Url : ${isUrl(text)}\n⬡ Ext : MP3\n⬡ Resolution : ${args[1] || '320kbps'}`, m)
-ser.sendMessage(m.chat, { audio: { url: media.dl_link }, mimetype: 'audio/mpeg', fileName: `${media.title}.mp3` }, { quoted: setQuoted })
+ser.sendMessage(m.chat, { audio: { url: media.dl_link }, mimetype: 'audio/mpeg', fileName: `${media.title}.mp3` }, { quoted: m })
 }
 break
 case 'getvideo': {
@@ -208,7 +208,7 @@ if (!urls) return reply(`Maybe the message you replied does not contain the ytse
 let quality = args[1] ? args[1] : '360p'
 let media = await ytv(urls[text - 1], quality)
 if (media.filesize >= 100000) return reply('File Over Limit '+util.format(media))
-ser.sendMessage(m.chat, { video: { url: media.dl_link }, mimetype: 'video/mp4', fileName: `${media.title}.mp4`, caption: `⬡ Title : ${media.title}\n⬡ File Size : ${media.filesizeF}\n⬡ Url : ${isUrl(text)}\n⬡ Ext : MP3\n⬡ Resolution : ${args[1] || '360p'}` }, { quoted: setQuoted })
+ser.sendMessage(m.chat, { video: { url: media.dl_link }, mimetype: 'video/mp4', fileName: `${media.title}.mp4`, caption: `⬡ Title : ${media.title}\n⬡ File Size : ${media.filesizeF}\n⬡ Url : ${isUrl(text)}\n⬡ Ext : MP3\n⬡ Resolution : ${args[1] || '360p'}` }, { quoted: m })
 }
 break
 case 'song': case 'play': case 'ytplay': {
@@ -314,7 +314,7 @@ let no = 1
 for (let i of search.all) {
 teks += `⬡ No : ${no++}\n⬡ Type : ${i.type}\n⬡ Video ID : ${i.videoId}\n⬡ Title : ${i.title}\n⬡ Views : ${i.views}\n⬡ Duration : ${i.timestamp}\n⬡ Upload At : ${i.ago}\n⬡ Author : ${i.author.name}\n⬡ Url : ${i.url}\n\n─────────────────\n\n`
 }
-ser.sendMessage(m.chat, { image: { url: search.all[0].thumbnail }, fileLength: 4444444444, jpegThumbnail: ytsthumb, caption: teks }, { quoted: setQuoted })
+ser.sendMessage(m.chat, { image: { url: search.all[0].thumbnail }, fileLength: 4444444444, jpegThumbnail: ytsthumb, caption: teks }, { quoted: m })
 }
 break
 }
