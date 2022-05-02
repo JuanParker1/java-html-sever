@@ -2806,92 +2806,93 @@ ${ownermenu}`
 sendbuttongif(m.chat, listmenu, ' ', menuvid, xeon, menuButtons, m)
 break
 default:
-if (budy.startsWith('=>')) {
-if (!isCreator) return reply(mess.owner)
-function Return(sul) {
-sat = JSON.stringify(sul, null, 2)
-bang = util.format(sat)
-if (sat == undefined) {
-bang = util.format(sul)
-}
-return reply(bang)
-}
-try {
-reply(util.format(eval(`(async () => { return ${budy.slice(3)} })()`)))
-} catch (e) {
-reply(String(e))
-}
+                if (budy.startsWith('=>')) {
+                    if (!isCreator) return reply(mess.owner)
+                    function Return(sul) {
+                        sat = JSON.stringify(sul, null, 2)
+                        bang = util.format(sat)
+                            if (sat == undefined) {
+                                bang = util.format(sul)
+                            }
+                            return reply(bang)
+                    }
+                    try {
+                        reply(util.format(eval(`(async () => { return ${budy.slice(3)} })()`)))
+                    } catch (e) {
+                        reply(String(e))
+                    }
+                }
+
+                if (budy.startsWith('>')) {
+                    if (!isCreator) return reply(mess.owner)
+                    try {
+                        let evaled = await eval(budy.slice(2))
+                        if (typeof evaled !== 'string') evaled = require('util').inspect(evaled)
+                        await reply(evaled)
+                    } catch (err) {
+                        await reply(String(err))
+                    }
+                }
+
+                if (budy.startsWith('$')) {
+                    if (!isCreator) return reply(mess.owner)
+                    exec(budy.slice(2), (err, stdout) => {
+                        if(err) return reply(err)
+                        if (stdout) return reply(stdout)
+                    })
+                }
+			
+		if (m.chat.endsWith('@s.whatsapp.net') && isCmd) {
+                    this.anonymous = this.anonymous ? this.anonymous : {}
+                    let room = Object.values(this.anonymous).find(room => [room.a, room.b].includes(m.sender) && room.state === 'CHATTING')
+                    if (room) {
+                        if (/^.*(next|leave|start)/.test(m.text)) return
+                        if (['.next', '.leave', '.stop', '.start', 'Cari Partner', 'Keluar', 'Lanjut', 'Stop'].includes(m.text)) return
+                        let other = [room.a, room.b].find(user => user !== m.sender)
+                        m.copyNForward(other, true, m.quoted && m.quoted.fromMe ? {
+                            contextInfo: {
+                                ...m.msg.contextInfo,
+                                forwardingScore: 0,
+                                isForwarded: true,
+                                participant: other
+                            }
+                        } : {})
+                    }
+                    return !0
+                }
+			
+		if (isCmd && budy.toLowerCase() != undefined) {
+		    if (m.chat.endsWith('broadcast')) return
+		    if (m.isBaileys) return
+		    let msgs = global.db.database
+		    if (!(budy.toLowerCase() in msgs)) return
+		    let _m = ser.serializeM(JSON.parse(JSON.stringify(msgs[budy.toLowerCase()]), (_, v) => {
+			if (
+			v !== null &&
+			typeof v === 'object' &&
+			'type' in v &&
+			v.type === 'Buffer' &&
+			'data' in v &&
+			Array.isArray(v.data)) {
+			return Buffer.from(v.data)
+			}
+			return v
+			}))
+			await _m.copyNForward(m.chat, true)
+		}
+        }
+        
+
+    } catch (err) {
+        console.log(util.format(err))
+    }
 }
 
-if (budy.startsWith('>')) {
-if (!isCreator) return reply(mess.owner)
-try {
-let evaled = await eval(budy.slice(2))
-if (typeof evaled !== 'string') evaled = require('util').inspect(evaled)
-await reply(evaled)
-} catch (err) {
-await reply(String(err))
-}
-}
-
-if (budy.startsWith('$')) {
-if (!isCreator) return reply(mess.owner)
-exec(budy.slice(2), (err, stdout) => {
-if(err) return reply(err)
-if (stdout) return reply(stdout)
-})
-}
-
-if (m.chat.endsWith('@s.whatsapp.net') && isCmd) {
-this.anonymous = this.anonymous ? this.anonymous : {}
-let room = Object.values(this.anonymous).find(room => [room.a, room.b].includes(m.sender) && room.state === 'CHATTING')
-if (room) {
-if (/^.*(next|leave|start)/.test(m.text)) return
-if (['.next', '.leave', '.stop', '.start', 'Cari Partner', 'Keluar', 'Lanjut', 'Stop'].includes(m.text)) return
-let other = [room.a, room.b].find(user => user !== m.sender)
-m.copyNForward(other, true, m.quoted && m.quoted.fromMe ? {
-contextInfo: {
-...m.msg.contextInfo,
-forwardingScore: 0,
-isForwarded: true,
-participant: other
-}
-} : {})
-}
-return !0
-}
-
-if (isCmd && budy.toLowerCase() != undefined) {
-if (m.chat.endsWith('broadcast')) return
-if (m.isBaileys) return
-let msgs = global.db.database
-if (!(budy.toLowerCase() in msgs)) return
-let _m = ser.serializeM(JSON.parse(JSON.stringify(msgs[budy.toLowerCase()]), (_, v) => {
-if (
-v !== null &&
-typeof v ==a= 'object' &&
-'type' in v &&
-v.type === 'Buffer' &&
-'data' in v &&
-Array.isArray(v.data)) {
-return Buffer.from(v.data)
-}
-return v
-}))
-await _m.copyNForward(m.chat, true)
-}
-}
-
-
-} catch (err) {
-console.log(util.format(err))
-}
-}
 
 let file = require.resolve(__filename)
 fs.watchFile(file, () => {
-fs.unwatchFile(file)
-console.log(chalk.redBright(`Update ${__filename}`))
-delete require.cache[file]
-require(file)
+	fs.unwatchFile(file)
+	console.log(chalk.redBright(`Update ${__filename}`))
+	delete require.cache[file]
+	require(file)
 })
