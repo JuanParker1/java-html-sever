@@ -27,6 +27,7 @@
 	const Canvacord = require('canvacord')
 	const MP3Cutter = require('mp3-cutter');
 	const { igDownload } = require('./lib/igdown')
+	let { FileSize } = require('./lib/scraper')
 	const { playstore, pinterest, igdl, igstory, igstalk, youtube } = require('./lib/hermitapi')
 	const { UploadFileUgu, webp2mp4File, TelegraPh, upload } = require('./lib/uploader')
 	const { toAudio, toPTT } = require('./lib/converter')
