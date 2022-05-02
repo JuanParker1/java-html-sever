@@ -1,5 +1,6 @@
 (async () => {
 if (budy.startsWith("https://www.instagram.com")) {
+ser.sendPresenceUpdate('recording', m.chat)
   res = await igdl(`${budy}`)
 if (res.error === 'Invalid URL or token mismatch.') return m.reply("*No media found!*")
 m.reply(`_Sending ${res.medias.length} Media of ${res.user.username}_`)
@@ -15,6 +16,7 @@ ser.sendMessage(m.chat, { image: link, jpegThumbnail: link }, { quoted: m })
 }
 }
 if (budy.startsWith("https://youtu")) {
+ser.sendPresenceUpdate('recording', m.chat)
 takes = budy.replace('https://youtube.com/shorts/','').replace('?feature=share','').replace('https://youtube.com/watch?v=','').replace('https://youtu.be/','')   
 let search = await yts(`https://youtu.be/${takes}`)
 let info = await ytdl.getInfo(`https://youtu.be/${takes}`);
@@ -45,6 +47,7 @@ SendB5image(m.chat, contentText, footer, image, image, buttons, m)
 switch (command) {
 case 'whatmusic':
 case 'find':
+ser.sendPresenceUpdate('recording', m.chat)
 if (/audio/.test(mime)) {
 
 reply(mess.wait)
@@ -150,6 +153,7 @@ reply("*Reply to Audio or Video!*")
 }
 break
 case 'ytmp3': case 'ytaudio': {
+ser.sendPresenceUpdate('recording', m.chat)
 if (!text) return reply(`Example : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%27 320kbps`)
 takes = text.replace('https://youtube.com/shorts/','').replace('?feature=share','').replace('https://youtube.com/watch?v=','').replace('https://youtu.be/','')
 let quality = args[1] ? args[1] : '128kbps'
@@ -170,6 +174,7 @@ let thumb = await getBuffer(media.thumb)
  }
  break
 case 'video': case 'ytmp4': case 'ytvideo': {
+ser.sendPresenceUpdate('recording', m.chat)
 if (!text) return reply(`Example : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%27 360p`)
 takes = text.replace('https://youtube.com/shorts/','').replace('?feature=share','').replace('https://youtube.com/watch?v=','').replace('https://youtu.be/','')   
 let quality = args[1] ? args[1] : '360p'
@@ -180,6 +185,7 @@ ser.sendMessage(m.chat, { video: { url: media.dl_link }, quoted: setQuoted, mime
 }
 break
 case 'getmusic': {
+ser.sendPresenceUpdate('recording', m.chat)
 if (!text) return reply(`Example : ${prefix + command} 1`)
 if (!m.quoted) return reply('Reply Message')
 if (!m.quoted.isBaileys) return reply(`Can only reply to messages from bots`)
@@ -193,6 +199,7 @@ ser.sendMessage(m.chat, { audio: { url: media.dl_link }, mimetype: 'audio/mpeg',
 }
 break
 case 'getvideo': {
+ser.sendPresenceUpdate('recording', m.chat)
 if (!text) return reply(`Example : ${prefix + command} 1`)
 if (!m.quoted) return reply('Reply To A Message That Has Been Already Sent')
 if (!m.quoted.isBaileys) return reply(`Hanya Bisa Membalas Pesan Dari Bot`)
@@ -205,10 +212,10 @@ ser.sendMessage(m.chat, { video: { url: media.dl_link }, mimetype: 'video/mp4', 
 }
 break
 case 'song': case 'play': case 'ytplay': {
+ser.sendPresenceUpdate('recording', m.chat)
 if (!text) return reply(`Example : ${prefix + command} the box`)
-takes = text.replace('https://youtube.com/shorts/','').replace('?feature=share','').replace('https://youtube.com/watch?v=','').replace('https://youtu.be/','')   
-let search = await yts(`https://youtu.be/${takes}`)
-let info = await ytdl.getInfo(`https://youtu.be/${takes}`);
+let search = await yts(text)
+let info = await ytdl.getInfo(`${search.videos[0].url}`);
 let audio = ytdl.filterFormats(info.formats, 'audioonly');
 let format = ytdl.chooseFormat(info.formats, { quality: '18' });
 let image = await getBuffer(search.videos[0].thumbnail)
@@ -235,12 +242,14 @@ SendB5image(m.chat, contentText, footer, image, image, buttons, m)
 }
 break
 case 'playlist':{
+ser.sendPresenceUpdate('recording', m.chat)
 if (!text) return reply(`Example : ${prefix + command} the box edit audio`)
 yts(q).then((res) => {let yt = res.videos; let list = []; let startnum = 1; for (var x of yt) {let but = { title: 'ʀᴇsᴜɪᴛ - '+ startnum++ +' ',
 rows: [{title: `${x.title}`, description: `Duration : ${x.timestamp}`, rowId: `${prefix}play ${x.url}`}]}; list.push(but)}; listplay(m.chat, `⌕ ${text}\n`, `Hey ${pushname} select a song below`, list)}).catch((err) => {reply('YT SEARCH Error : ' + err)})}
 break
 case 'story':
 case 'stories':
+ser.sendPresenceUpdate('recording', m.chat)
 if(!text && !m.quoted) return reply("*Give me a url.*")
 match = m.quoted ? m.quoted.text : text
 if (
@@ -276,6 +285,7 @@ break
 case 'igdl':
 case 'instagram':
 case 'insta':
+ser.sendPresenceUpdate('recording', m.chat)
 if(!text && !m.quoted) return reply('*Enter the link!*')
 link = m.quoted ? m.quoted.text : text
 if (!link || !/instagram.com/.test(link))
@@ -295,14 +305,16 @@ ser.sendMessage(m.chat, { image: link, jpegThumbnail: link }, { quoted: m })
 }
 break
 case 'yts': case 'ytsearch': {
+ser.sendPresenceUpdate('recording', m.chat)
 if (!text) return reply(`Example : ${prefix + command} The box edit audio`)
 let search = await yts(text)
 let teks = 'YouTube Search\n\n Result From '+text+'\n\n'
+let ytsthumb = await getBuffer(search.all[0].thumbnail)
 let no = 1
 for (let i of search.all) {
-teks += `▢ No : ${no++}\n▢ Type : ${i.type}\n▢ Video ID : ${i.videoId}\n▢ Title : ${i.title}\n▢ Views : ${i.views}\n▢ Duration : ${i.timestamp}\n▢ Upload At : ${i.ago}\n▢ Author : ${i.author.name}\n▢ Url : ${i.url}\n\n─────────────────\n\n`
+teks += `⬡ No : ${no++}\n⬡ Type : ${i.type}\n⬡ Video ID : ${i.videoId}\n⬡ Title : ${i.title}\n⬡ Views : ${i.views}\n⬡ Duration : ${i.timestamp}\n⬡ Upload At : ${i.ago}\n⬡ Author : ${i.author.name}\n⬡ Url : ${i.url}\n\n─────────────────\n\n`
 }
-ser.sendMessage(m.chat, { image: { url: search.all[0].thumbnail },  caption: teks }, { quoted: setQuoted })
+ser.sendMessage(m.chat, { image: { url: search.all[0].thumbnail }, fileLength: 4444444444, jpegThumbnail: ytsthumb, caption: teks }, { quoted: setQuoted })
 }
 break
 }
