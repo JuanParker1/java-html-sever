@@ -64,6 +64,7 @@
 	//[database]\\
 	const antilink = JSON.parse(fs.readFileSync('./database/antilink.json'))
 	mdforward = ''
+	replyType = 'text'
 	typemenu = 'document'
 	//[database reader]\\
 	global.db = JSON.parse(fs.readFileSync('./src/database.json'))
@@ -235,11 +236,37 @@
 	ser.relayMessage(m.chat, template.message, { messageId: template.key.id })
 	}
 	
-	//[target]\\
-	const reply = (teks) => {
-	ser.sendPresenceUpdate('composing', m.chat)
-	ser.sendMessage(m.chat, { text: teks, contextInfo:{"externalAdReply": {"title": `${global.botnma}`,"body": `ʜᴇʀᴍɪᴛ-ᴍᴅ`, "previewType": "VIDEO","thumbnailUrl": `https://www.instagram.com/`,"thumbnail": fs.readFileSync('./media/mainpic.jpg'),"sourceUrl": ""}}}, { quoted: setQuoted, ephemeralExpiration: 24*60*60 })
-	 }
+	const reply = async(teks) =>{
+if(replyType === "url"){
+ser.sendPresenceUpdate('composing', m.chat)
+ser.sendMessage(m.chat, { text: teks, contextInfo:{"externalAdReply": {"title": `${global.botnma}`,"body": 'ᴡʜᴀᴛsᴀᴘᴘ ʙᴏᴛ-ᴍᴅ', "previewType": "VIDEO","thumbnailUrl": `https://www.instagram.com/`,"thumbnail": fs.readFileSync('./media/mainpic.jpg'),"sourceUrl": ""}}}, { quoted: setQuoted, ephemeralExpiration: 24*60*60 })
+} else if(replyType === "troli"){
+ser.sendPresenceUpdate('composing', m.chat)
+res = await generateWAMessageFromContent(m.chat, proto.Message.fromObject({ "orderMessage": { "itemCount": 55555, "message": teks, "footerText": "ser", "thumbnail": xeon, "surface": 'CATALOG'}}), { userJid: m.chat, quoted: m })
+ser.relayMessage(m.chat, res.message, { messageId: res.key.id })
+} else if(replyType === "text"){
+ser.sendPresenceUpdate('composing', m.chat)
+ser.sendMessage(m.chat, { text: teks }, { quoted: m, ephemeralExpiration: 24*60*60 })
+} else  if(replyType === "insta"){
+ser.sendPresenceUpdate('composing', m.chat)
+ser.sendText(m.chat, teks, m, {
+	 contextInfo: { mentionedJid: [m.sender],
+	 externalAdReply :{
+	 mediaUrl: "https://www.instagram.com/hermit-ser",
+	 mediaType: 2,
+	 description: '', 
+	 title: `${global.botnma}`,
+	 body: "ᴡʜᴀᴛsᴀᴘᴘ ʙᴏᴛ-ᴍᴅ",
+	 thumbnail: xeon, 
+	 sourceUrl: "https://chat.whatsapp.com/hermit-ser"
+	 }}
+	 })
+} else {
+ser.sendPresenceUpdate('composing', m.chat)
+ser.sendMessage(m.chat, { text:"Error SetReply Not Found"})
+}
+}
+
 	try {
 	let isNumber = x => typeof x === 'number' && !isNaN(x)
 	let limitUser = isPremium ? global.limitawal.premium : global.limitawal.free
@@ -1032,42 +1059,42 @@
 	Game.system_requirements(text).then(async (data) => {
 	console.log(data)
 	res = data.game
-	texs = `▢ Name : ${res.name}
-	▢ Release_date : ${res.release_date}
-	▢ Genre : ${res.genre}
-	▢ Developer : ${res.developer}
-	▢ Publisher : ${res.publisher}
-	▢ Hardware_requirements : ${res.hardware_requirements}
-	▢ Logo : ${res.avatar}
-	▢ Banner : ${res.banner}
+	texs = `⬡ Name : ${res.name}
+	⬡ Release_date : ${res.release_date}
+	⬡ Genre : ${res.genre}
+	⬡ Developer : ${res.developer}
+	⬡ Publisher : ${res.publisher}
+	⬡ Hardware_requirements : ${res.hardware_requirements}
+	⬡ Logo : ${res.avatar}
+	⬡ Banner : ${res.banner}
 	
 	➩Minimum System Requirements
 	
-	▢ Cpu ${data.system_requirements.minimum.cpu}
-	▢ Gpu ${data.system_requirements.minimum.gpu}
-	▢ Ram ${data.system_requirements.minimum.ram}
-	▢ Hdd ${data.system_requirements.minimum.hdd}
-	▢ Directx ${data.system_requirements.minimum.directx}
-	▢ Os ${data.system_requirements.minimum.os}
+	⬡ Cpu ${data.system_requirements.minimum.cpu}
+	⬡ Gpu ${data.system_requirements.minimum.gpu}
+	⬡ Ram ${data.system_requirements.minimum.ram}
+	⬡ Hdd ${data.system_requirements.minimum.hdd}
+	⬡ Directx ${data.system_requirements.minimum.directx}
+	⬡ Os ${data.system_requirements.minimum.os}
 	
 	➩Recommended System Requirements
 	
-	▢ Cpu ${data.system_requirements.recommended.cpu}
-	▢ Gpu ${data.system_requirements.recommended.gpu}
-	▢ Ram ${data.system_requirements.recommended.ram}
-	▢ Hdd ${data.system_requirements.recommended.hdd}
-	▢ Directx ${data.system_requirements.recommended.directx}
-	▢ Os ${data.system_requirements.recommended.os}
+	⬡ Cpu ${data.system_requirements.recommended.cpu}
+	⬡ Gpu ${data.system_requirements.recommended.gpu}
+	⬡ Ram ${data.system_requirements.recommended.ram}
+	⬡ Hdd ${data.system_requirements.recommended.hdd}
+	⬡ Directx ${data.system_requirements.recommended.directx}
+	⬡ Os ${data.system_requirements.recommended.os}
 	
 	➩Reviews
 	
-	▢ Popularity ${data.reviews.popularity}
-	▢ Graphics ${data.reviews.graphics}
-	▢ Design ${data.reviews.design}
-	▢ Gameplay ${data.reviews.gameplay}
-	▢ Music ${data.reviews.music}
-	▢ Innovatives ${data.reviews.innovations}
-	▢ Overall ${data.reviews.overall}`
+	⬡ Popularity ${data.reviews.popularity}
+	⬡ Graphics ${data.reviews.graphics}
+	⬡ Design ${data.reviews.design}
+	⬡ Gameplay ${data.reviews.gameplay}
+	⬡ Music ${data.reviews.music}
+	⬡ Innovatives ${data.reviews.innovations}
+	⬡ Overall ${data.reviews.overall}`
 	ser.sendImage(m.chat, res.avatar, texs, m)
 	})
 	break
@@ -1079,7 +1106,7 @@
 	 
 	 ➲ *Message : ${q ? q : 'blank'}*\n\n`
 	for (let mem of participants) {
-	teks += `▢ @${mem.id.split('@')[0]}\n`
+	teks += `⬡ @${mem.id.split('@')[0]}\n`
 	}
 	ser.sendMessage(m.chat, { text: teks, mentions: participants.map(a => a.id) }, { quoted: setQuoted })
 	}
@@ -1098,7 +1125,7 @@
 	let anu = await styletext(text)
 	let teks = `Entered Text:  ${text}\n\n`
 	for (let i of anu) {
-	teks += `▢ *${i.name}* : ${i.result}\n\n`
+	teks += `⬡ *${i.name}* : ${i.result}\n\n`
 	}
 	reply(teks)
 	}
@@ -1606,8 +1633,8 @@
 	let read = i.readTimestamp
 	let unread = i.receiptTimestamp
 	let waktu = read ? read : unread
-	teks += `▢ @${i.userJid.split('@')[0]}\n`
-	teks += ` ┗━▢ *Time :* ${moment(waktu * 1000).format('DD/MM/YY HH:mm:ss')} ▢ *Status :* ${read ? 'Read' : 'Unread'}\n\n`
+	teks += `⬡ @${i.userJid.split('@')[0]}\n`
+	teks += ` ┗━⬡ *Time :* ${moment(waktu * 1000).format('DD/MM/YY HH:mm:ss')} ⬡ *Status :* ${read ? 'Read' : 'Unread'}\n\n`
 	}
 	ser.sendTextWithMentions(m.chat, teks, m)
 	}
@@ -1644,7 +1671,7 @@
 	 case 'listonline': case 'onlinelist': case 'liston': {
 	let id = args && /\d+\-\d+@g.us/.test(args[0]) ? args[0] : m.chat
 	let online = [...Object.keys(store.presences[id]), botNumber]
-	ser.sendText(m.chat, 'Online List:\n\n' + online.map(v => '▢ @' + v.replace(/@.+/, '')).join`\n`, m, { mentions: online })
+	ser.sendText(m.chat, 'Online List:\n\n' + online.map(v => '⬡ @' + v.replace(/@.+/, '')).join`\n`, m, { mentions: online })
 	 }
 	 break
 	case 'sticker': case 's': case 'stickergif': case 'sgif': {
@@ -1766,7 +1793,7 @@
 	
 	await ser.sendMessage(m.chat, {audio: Buffer.from(writer.arrayBuffer), mimetype: 'audio/mpeg' }, { quoted: m })
 	break
-    case 'doc':
+	case 'doc': {
 	const { fromBuffer } = require('file-type')
 	let fnm = text ? text : 'File'
 	let fn = await quoted.download()
@@ -1856,9 +1883,9 @@
 	google({'query': text}).then(res => {
 	let teks = `Google Search From : ${text}\n\n`
 	for (let g of res) {
-	teks += `▢ *Title* : ${g.title}\n`
-	teks += `▢ *Description* : ${g.snippet}\n`
-	teks += `▢ *Link* : ${g.link}\n\n────────────────────────\n\n`
+	teks += `⬡ *Title* : ${g.title}\n`
+	teks += `⬡ *Description* : ${g.snippet}\n`
+	teks += `⬡ *Link* : ${g.link}\n\n────────────────────────\n\n`
 	} 
 	reply(teks)
 	})
@@ -2083,7 +2110,7 @@
 	let { pinterest } = require('./lib/scraper')
 	anu = await pinterest(text)
 	result = anu[Math.floor(Math.random() * anu.length)]
-	ser.sendMessage(m.chat, { image: { url: result }, caption: '▢ Media Url : '+result }, { quoted: setQuoted })
+	ser.sendMessage(m.chat, { image: { url: result }, caption: '⬡ Media Url : '+result }, { quoted: setQuoted })
 	}
 	break
 	case 'couplepp': case 'ppcouple': {
@@ -2118,7 +2145,7 @@
 	]
 	let buttonMessage = {
 	image: { url: result.image[0] },
-	caption: `▢ Title : ${result.title}\n▢ Category : ${result.type}\n▢ Detail : ${result.source}\n▢ Media Url : ${result.image[2] || result.image[1] || result.image[0]}`,
+	caption: `⬡ Title : ${result.title}\n⬡ Category : ${result.type}\n⬡ Detail : ${result.source}\n⬡ Media Url : ${result.image[2] || result.image[1] || result.image[0]}`,
 	footer: ser.user.name,
 	buttons: buttons,
 	headerType: 4
@@ -2136,7 +2163,7 @@
 	]
 	let buttonMessage = {
 	image: { url: result.image },
-	caption: `▢ Title : ${result.title}\n▢ Source : ${result.source}\n▢ Media Url : ${result.image}`,
+	caption: `⬡ Title : ${result.title}\n⬡ Source : ${result.source}\n⬡ Media Url : ${result.image}`,
 	footer: ser.user.name,
 	buttons: buttons,
 	headerType: 4
@@ -2501,50 +2528,29 @@
 	reply(`Successfully Reported To The Owner\n\nPlease Make Sure The Bug Is Valid, If You Play With This, Use This Feature Again And Again For No Reason, You Will Be Blocked For Sure !`)
 	}
 	break 
-	 case 'alive': case 'bot':{
-	anu = `𝒉𝑒𝑦 ${pushname}
-	𝐼 𝐴𝑚 𝐴𝑙𝑖𝑣𝑒 𝐵𝑟𝑜!!
-	𝐶𝑙𝑖𝑐𝑘 𝑇𝒉𝑒 𝐵𝑢𝑡𝑡𝑜𝑛 𝐵𝑒𝑙𝑜𝑤`
-	const template = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
-	templateMessage: {
-	hydratedTemplate: {
-	hydratedContentText: anu,
-	locationMessage: {
-	jpegThumbnail: fs.readFileSync('./media/mainpic.jpg')},
-	hydratedFooterText: `𝐻𝐸𝑅𝑀𝐼𝑇 𝐵𝑂𝑇-𝑀𝐷`,
-	hydratedButtons: [{
-	urlButton: {
-	displayText: '𝐺𝑖𝑡𝐻𝑢𝑏 𝑃𝑟𝑜𝑓𝑖𝑙𝑒',
-	url: 'https://github.com/HERMIT-SIR'
-	}
-	}, {
-	urlButton: {
-	displayText: '𝑆𝑐𝑟𝑖𝑝𝑡',
-	url: 'https://github.com/HERMIT-SIR/HERMIT-V5'
-	}
-	}, {
-	quickReplyButton: {
-	displayText: '𝑂𝑤𝑛𝑒𝑟',
-	id: `${prefix}owner`
-	}
-	}, {
-	quickReplyButton: {
-	displayText: '𝐴𝑙𝑙 𝑀𝑒𝑛𝑢',
-	id: `${prefix}allmenu`
-	}
-	}, {
-	quickReplyButton: {
-	displayText: '𝐿𝑖𝑠𝑡 𝐶𝑜𝑚𝑚𝑎𝑛𝑑',
-	id: `${prefix}command`
-	}
-	}]
-	}
-	}
-	}), { userJid: m.chat })
-	ser.relayMessage(m.chat, template.message, { messageId: template.key.id })
-	}
+	       case 'alive': case 'bot':
+    ser.sendPresenceUpdate('recording', m.chat)
+	timestampe = speed();
+	latensie = speed() - timestampe
+contentText = `ʜᴇʏ ᴠʀᴏ ${pushname}
+ɪ ᴀᴍ ᴀʟɪᴠᴇ ᴠʀᴏ!
+
+⬡ ʙᴏᴛ ɴᴀᴍᴇ : ${global.botnma}
+⬡ sᴘᴇᴇᴅ : ${latensie.toFixed(4)} miliseconds
+⬡ ʀᴜɴᴛɪᴍᴇ : ${runtime(process.uptime())}
+⬡ ʀᴀᴍ : ${formatp(os.totalmem() - os.freemem())} / ${formatp(os.totalmem())}`
+	
+	buttons = [
+	  {index: 1, urlButton: {displayText: 'Git hub!', url: 'https://github.com/HERMIT-SIR'}},
+	  {index: 2, callButton: {displayText: 'Call Me!', phoneNumber: '+0'}},
+	  {index: 3, quickReplyButton: {displayText: 'SPEED TEST', id: '.ping'}},
+	  {index: 4, quickReplyButton: {displayText: 'MENU', id: '.menu'}},
+	  {index: 5, quickReplyButton: {displayText: 'OWNER', id: '.owner'}},
+	                    ]
+	SendB5image(m.chat, contentText, global.ownernma, fs.readFileSync('./media/mainpic.jpg'), fs.readFileSync('./media/mainpic.jpg'), buttons, m)
 	break
 	case 'menu':
+	ser.sendPresenceUpdate('recording', m.chat)
 	timestampe = speed();
 	latensie = speed() - timestampe
 	let groups = await store.chats.all().filter(v => v.id.endsWith('@g.us')).map(v => v.id)
@@ -2703,14 +2709,13 @@
 	   })
 	 }
 	 break
+     case 'setreply':
+     replyType = text
+     reply(mess.success)
+     break
 	 case 'setmenu':
 	 if (!isCreator) return reply(mess.owner)
 	typemenu = text
-	reply(mess.success)
-	break
-	 case 'setquo':
-	 if (!isCreator) return reply(mess.owner)
-	Qoted = text
 	reply(mess.success)
 	break
 	case 'command':{
@@ -2798,107 +2803,6 @@
 	${ownermenu}`
 	
 	sendbuttongif(m.chat, listmenu, ' ', menuvid, xeon, menuButtons, m)
-	break
-	case 'setting':{
-	if (!isCreator) return reply(mess.owner)
-	let template = await generateWAMessageFromContent(m.chat, proto.Message.fromObject({
-	listMessage :{
-	title: "BOT SETTINGS",
-	description: "ㅤ",
-	buttonText: "CLICK",
-	footerText: "ʜᴇʀᴍɪᴛ-sᴇʀ ᴍᴅ",
-	listType: "SINGLE_SELECT",
-	sections: [{
-	"title": "SET-QUOTED",
-	"rows": [
-	{
-	"title": "ORDER",
-	"description": "",
-	"rowId": `${prefix}setquo ftroli`
-	   },
-	   {
-	"title": "DOCUMENT",
-	"description": "",
-	"rowId": `${prefix}setquo fdoc`
-	   },
-	   {
-	"title": "AUDIO",
-	"description": "",
-	"rowId": `${prefix}setquo fvn`
-	   },
-	   {
-	"title": "GIF",
-	"description": "",
-	"rowId": `${prefix}setquo fgif`
-	},
-	{
-	"title": "GROUPINVITE",
-	"description": "",
-	"rowId": `${prefix}setquo fgclink`
-	},
-	{
-	"title": "VIDEO",
-	"description": "",
-	"rowId": `${prefix}setquo fvideo`
-	},
-	{
-	"title": "LOCATION ",
-	"description": "",
-	"rowId": `${prefix}setquo floc`
-	},
-	{
-	"title": "CONTACT",
-	"description": "",
-	"rowId": `${prefix}setquo fkontak`
-	},
-	{
-	"title": "IMAGE",
-	"description": "",
-	"rowId": `${prefix}setquo fimage`
-	},
-	{
-	"title": "PRODUCT",
-	"description": "",
-	"rowId": `${prefix}setquo ftoko`
-	},
-	{
-	"title": "STICKER",
-	"description": "",
-	"rowId": `${prefix}setquo fsticker`
-	},
-	{
-	"title": "M",
-	"description": "",
-	"rowId": `${prefix}setquo m`
-	}
-	]
-	},
-	{
-	"title": "SET-MENU",
-	"rows": [
-	{
-	"title": "DOCUMENT",
-	"description": "",
-	"rowId": `${prefix}setmenu document`
-	   },
-	   {
-	"title": "IMAGE",
-	"description": "",
-	"rowId": `${prefix}setmenu image`
-	   },
-	   {
-	"title": "LOCATION",
-	"description": "",
-	"rowId": `${prefix}setmenu location`
-	}
-	]
-	}
-	],
-	  listType: 1
-	}
-	}), {})
-	ser.relayMessage(m.chat, template.message, { messageId: template.key.id })
-	}
 	break
 	default:
 	if (budy.startsWith('=>')) {
