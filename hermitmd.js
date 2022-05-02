@@ -27,7 +27,7 @@
 	const Canvacord = require('canvacord')
 	const MP3Cutter = require('mp3-cutter');
 	const { igDownload } = require('./lib/igdown')
-	let { FileSize } = require('./lib/scraper')
+	let { FileSize, h2k } = require('./lib/scraper')
 	const { playstore, pinterest, igdl, igstory, igstalk, youtube } = require('./lib/hermitapi')
 	const { UploadFileUgu, webp2mp4File, TelegraPh, upload } = require('./lib/uploader')
 	const { toAudio, toPTT } = require('./lib/converter')
@@ -425,74 +425,6 @@
 	  } else if (levelRole <= 45) {
 	role = 'Good In Game'
 	  }
-	if (budy.startsWith("https://youtu")) {
-	takes = budy.replace('https://youtube.com/shorts/','').replace('?feature=share','').replace('https://youtube.com/watch?v=','').replace('https://youtu.be/','')   
-	search = await yts(`https://youtu.be/${takes}`)
-	thumb = await getBuffer(search.videos[0].thumbnail)
-	ngen = `
-	*▢ Title :* ${search.videos[0].title}
-	*▢ Ext :* Search
-	*▢ ID :* ${search.videos[0].videoId}
-	*▢ Duration :* ${search.videos[0].timestamp}
-	*▢ Viewers :* ${search.videos[0].views}
-	*▢ Uploaded :* ${search.videos[0].ago}
-	*▢ Author :* ${search.videos[0].author.name}
-	*▢ Channel :* ${search.videos[0].author.url}
-	`
-	message = await prepareWAMessageMedia({ image : { url: search.videos[0].thumbnail } }, { upload:   ser.waUploadToServer })
-	template = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
-	"templateMessage": {
-	"hydratedTemplate": {
-	 "imageMessage": {
-	 "url": message.imageMessage.url,
-	  "mimetype": "image/jpeg",
-	  "fileSha256": message.imageMessage.fileSha256,
-	  "fileLength": "500000000000000",
-	  "mediaKey": message.imageMessage.mediaKey,
-	  "fileEncSha256": message.imageMessage.fileEncSha256,
-	  "directPath": message.imageMessage.directPath,
-	  "mediaKeyTimestamp": message.imageMessage.mediaKeyTimestamp,
-	  "jpegThumbnail": thumb
-	   },
-	   "hydratedContentText": ngen,
-	"hydratedFooterText": 'YOUTUBE DOWNLOADER',
-	"hydratedButtons": [{
-	"urlButton": {
-	"displayText": 'VIDEO SOURCE LINK🔗',
-	"url": `${search.videos[0].url}`
-	}
-	}, {
-	"quickReplyButton": {
-	"displayText": "AUDIO🎵",
-	"id": `ytmp3 ${search.videos[0].url} 128kbps`
-	}
-	},{"quickReplyButton": {
-	"displayText": "VIDEO🎥",
-	"id": `ytmp4 ${search.videos[0].url} 360p`
-	}
-	}]
-	}
-	}
-	}), { userJid: m.chat, quoted: setQuoted })
-	  ser.relayMessage(m.chat, template.message, { messageId: template.key.id })
-	}
-	  
-	if (budy.startsWith("https://www.instagram.com")) {
-	  res = await igdl(`${budy}`)
-	if (res.error === 'Invalid URL or token mismatch.') return m.reply("*No media found!*")
-	m.reply(`_Sending ${res.medias.length} Media of ${res.user.username}_`)
-	for(let i of res.medias){
-	if(i.url.includes('mp4')){
-	let link = await getBuffer(i.url)
-	let igpreview = await getBuffer(i.preview)
-	ser.sendMessage(m.chat, { video: link, jpegThumbnail: igpreview }, { quoted: m })
-	} else {
-	let link = await getBuffer(i.url)
-	ser.sendMessage(m.chat, { image: link, jpegThumbnail: link }, { quoted: m })
-	}
-	}
-	}
-	//[Antilink]\\
 	
 	if (isAntiLink) 
 	if (budy.includes('https://chat.whatsapp.com/')) {
@@ -1834,34 +1766,12 @@
 	
 	await ser.sendMessage(m.chat, {audio: Buffer.from(writer.arrayBuffer), mimetype: 'audio/mpeg' }, { quoted: m })
 	break
-	case 'docx': {
-	if (!isCreator) return reply(mess.owner)
-	doc = fs.readFileSync('./src/database.json')
-	ser.sendMessage(m.chat, {document: doc, url: 'https://mmg.whatsapp.net/d/f/AsV3HlGpsFFvgawy77eryp6E9nlIy2B6Z994lOotheDg.enc', mimetype: 'application/json', fileSha256: 'iBDCLwUqX4xIypRmwJfM8AaGvP8A7XtE9o+fgJY+w4k=', fileLength: 999999999, pageCount: 5555, mediaKey: 's0BNiZ5ZQY7VXJee1yHr2ippWOidPt9TV/IweIuwB1s=', fileName: 'database.json', fileEncSha256: '8Qjd+PChLhwfUOFCBomhd9IyMRUOFgQ8ftdd6EGo0zo=', directPath: '/v/t62.7118-24/12102761_3192906891035576_6871625905296628001_n.enc?ccb=11-4&oh=01_AVxZHoDPW6uYn9OG237FIbub5m2aidndHT04fjlgNAdOTA&oe=626E61F7', mediaKeyTimestamp: '1648983951', jpegThumbnail: xeon}, { quoted : m })
-	}
-	break
-	case 'pptx': {
-	let buttons = [
-	{buttonId: `menu`, buttonText: {displayText: 'MENU'}, type: 1}
-	]
-	let buttonMessage = {
-	document: { url: 'https://i.ibb.co/WnzGvMN/87c4b7889a41.jpg' },
-	caption: "HERMIT SER DOCUMENT TEST @917034892686",
-	url: "https://mmg.whatsapp.net/d/f/AsV3HlGpsFFvgawy77eryp6E9nlIy2B6Z994lOotheDg.enc",
-	mimetype: "application/vnd.openxmlformats-officedocument.presentationml.presentation", 
-	fileSha256: "iBDCLwUqX4xIypRmwJfM8AaGvP8A7XtE9o+fgJY+w4k=",
-	fileLength: 9999999999999, 
-	pageCount: 5555, 
-	mediaKey: "s0BNiZ5ZQY7VXJee1yHr2ippWOidPt9TV/IweIuwB1s=",
-	fileName: "HERMIT SER DOCUMENTS", 
-	fileEncSha256: "8Qjd+PChLhwfUOFCBomhd9IyMRUOFgQ8ftdd6EGo0zo=",
-	directPath: "/v/t62.7118-24/12102761_3192906891035576_6871625905296628001_n.enc?ccb=11-4&oh=01_AVxZHoDPW6uYn9OG237FIbub5m2aidndHT04fjlgNAdOTA&oe=626E61F7",
-	mediaKeyTimestamp: "1648983951",
-	footer: ser.user.name,
-	buttons: buttons,
-	headerType: 4
-	}
-	ser.sendMessage(m.chat, buttonMessage,{sendEphemeral: true, contextInfo: {forwardingScore: 508, isForwarded: true, "externalAdReply": { "title": "𝚮𝚵𝚼𝚳𝚰𝚻 𝐒𝚺𝚪", "body": "sɪᴍᴘʟᴇ ᴡʜᴀᴛsᴀᴘᴘ-ᴍᴅ ʙᴏᴛ", "mediaType": "2", "thumbnail": "fake", "mediaUrl": "https://www.instagram.com/reel/CbLE6-Jt-yf/?igshid=YmMyMTA2M2Y=", "thumbnail": xeon, "sourceUrl": "",},mentionedJid:['917034892686@s.whatsapp.net']}, quoted : ftroli})
+    case 'doc':
+	const { fromBuffer } = require('file-type')
+	let fnm = text ? text : 'File'
+	let fn = await quoted.download()
+	let mime = await fromBuffer(fn)
+	ser.sendMessage(m.chat, {document: fn, mimetype: mime.mime, fileName: fnm+'.'+mime.ext, jpegThumbnail: fs.readFileSync('./docthumb.jpg')}, { quoted : fdoc })
 	}
 	break
 	case 'backup1': {
@@ -1940,17 +1850,6 @@
 	})
 	}
 	break
-	case 'yts': case 'ytsearch': {
-	if (!text) return reply(`Example : ${prefix + command} story wa anime`)
-	let search = await yts(text)
-	let teks = 'YouTube Search\n\n Result From '+text+'\n\n'
-	let no = 1
-	for (let i of search.all) {
-	teks += `▢ No : ${no++}\n▢ Type : ${i.type}\n▢ Video ID : ${i.videoId}\n▢ Title : ${i.title}\n▢ Views : ${i.views}\n▢ Duration : ${i.timestamp}\n▢ Upload At : ${i.ago}\n▢ Author : ${i.author.name}\n▢ Url : ${i.url}\n\n─────────────────\n\n`
-	}
-	ser.sendMessage(m.chat, { image: { url: search.all[0].thumbnail },  caption: teks }, { quoted: setQuoted })
-	}
-	break
 	case 'google': {
 	if (!text) return reply(`Example : ${prefix + command} fatih arridho`)
 	let google = require('google-it')
@@ -1986,64 +1885,6 @@
 	ser.sendMessage(m.chat, buttonMessage, { quoted: setQuoted })
 	})
 	}
-	break
-	case 'song': case 'play': case 'ytplay': {
-	if (!text) return reply(`Example : ${prefix + command} the box`)
-	takes = text.replace('https://youtube.com/shorts/','').replace('?feature=share','').replace('https://youtube.com/watch?v=','').replace('https://youtu.be/','')   
-	let search = await yts(`https://youtu.be/${takes}`)
-	let thumb = await getBuffer(search.videos[0].thumbnail)
-	ngen = `
-	*▢ Title :* ${search.videos[0].title}
-	*▢ Ext :* Search
-	*▢ ID :* ${search.videos[0].videoId}
-	*▢ Duration :* ${search.videos[0].timestamp}
-	*▢ Viewers :* ${search.videos[0].views}
-	*▢ Uploaded :* ${search.videos[0].ago}
-	*▢ Author :* ${search.videos[0].author.name}
-	*▢ Channel :* ${search.videos[0].author.url}
-	`
-	message = await prepareWAMessageMedia({ image : { url: search.videos[0].thumbnail } }, { upload:   ser.waUploadToServer })
-	template = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
-	"templateMessage": {
-	"hydratedTemplate": {
-	 "imageMessage": {
-	 "url": message.imageMessage.url,
-	  "mimetype": "image/jpeg",
-	  "fileSha256": message.imageMessage.fileSha256,
-	  "fileLength": "500000000000000",
-	  "mediaKey": message.imageMessage.mediaKey,
-	  "fileEncSha256": message.imageMessage.fileEncSha256,
-	  "directPath": message.imageMessage.directPath,
-	  "mediaKeyTimestamp": message.imageMessage.mediaKeyTimestamp,
-	  "jpegThumbnail": thumb
-	   },
-	   "hydratedContentText": ngen,
-	"hydratedFooterText": 'YOUTUBE DOWNLOADER',
-	"hydratedButtons": [{
-	"urlButton": {
-	"displayText": 'VIDEO SOURCE LINK🔗',
-	"url": `${search.videos[0].url}`
-	}
-	}, {
-	"quickReplyButton": {
-	"displayText": "AUDIO🎵",
-	"id": `ytmp3 ${search.videos[0].url} 128kbps`
-	}
-	},{"quickReplyButton": {
-	"displayText": "VIDEO🎥",
-	"id": `ytmp4 ${search.videos[0].url} 360p`
-	}
-	}]
-	}
-	}
-	}), { userJid: m.chat, quoted: setQuoted })
-	  ser.relayMessage(m.chat, template.message, { messageId: template.key.id })
-	}
-	break
-	case 'playlist':{
-	if (!text) return reply(`Example : ${prefix + command} the box edit audio`)
-	yts(q).then((res) => {let yt = res.videos; let list = []; let startnum = 1; for (var x of yt) {let but = { title: 'ʀᴇsᴜɪᴛ - '+ startnum++ +' ',
-	rows: [{title: `${x.title}`, description: `Duration : ${x.timestamp}`, rowId: `${prefix}play ${x.url}`}]}; list.push(but)}; listplay(m.chat, `⌕ ${text}\n`, `Hey ${pushname} select a song below`, list)}).catch((err) => {reply('YT SEARCH Error : ' + err)})}
 	break
 	case 'setinfo':
 	if (!isQuotedAudio) return reply('reply to audio')
@@ -2102,38 +1943,6 @@
 	ser.sendMessage(m.chat, reactionMessage)
 	}
 	break
-	case 'ytmp3': case 'ytaudio': {
-	let { yta } = require('./lib/y2mate')
-	if (!text) return reply(`Example : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%27 320kbps`)
-	takes = text.replace('https://youtube.com/shorts/','').replace('?feature=share','').replace('https://youtube.com/watch?v=','').replace('https://youtu.be/','')
-	let quality = args[1] ? args[1] : '128kbps'
-	let media = await yta(`https://youtu.be/${takes}`, quality)
-	if (media.filesize >= 999999) return reply('Audio size is too big '+util.format(media))
-	let thumb = await getBuffer(media.thumb)
-	 ser.sendAudio(m.chat, media.dl_link, m, {
-	 contextInfo: { mentionedJid: [m.sender],
-	 externalAdReply :{
-	 mediaUrl: text,
-	 mediaType: 2,
-	 description: '', 
-	 title: `.•♫•♬• ${media.title} •♬•♫•.`,
-	 body: `${ser.user.name}`,
-	 thumbnail: thumb, 
-	 }}
-	 })
-	 }
-	 break
-	case 'video': case 'ytmp4': case 'ytvideo': {
-	let { ytv } = require('./lib/y2mate')
-	if (!text) return reply(`Example : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%27 360p`)
-	takes = text.replace('https://youtube.com/shorts/','').replace('?feature=share','').replace('https://youtube.com/watch?v=','').replace('https://youtu.be/','')   
-	let quality = args[1] ? args[1] : '360p'
-	let media = await ytv(`https://youtu.be/${takes}`, quality)
-	if (media.filesize >= 999999) return reply('Video size is too big '+util.format(media))
-	let img = await getBuffer(media.thumb)
-	ser.sendMessage(m.chat, { video: { url: media.dl_link }, quoted: setQuoted, mimetype: 'video/mp4', jpegThumbnail: img, filename: `${media.title}.mp4`, caption: `*Title :* ${media.title}\n*Size :* ${media.filesizeF}\n*Resololution :* ${args[1] || '360p'}`})
-	}
-	break
 	   case 'mediafire':
 	   const { mediafireDl } = require('./lib/mediafire.js')
 	   medialink = text || mek.message.extendedTextMessage.contextInfo.quotedMessage.conversation
@@ -2148,33 +1957,6 @@
 	 reply(result)
 	 ser.sendMessage(m.chat, {document: {url: res[0].link }, mimetype: res[0].mime, fileName: `${res[0].nama}` }, {quoted:setQuoted}).catch ((err) => reply("error Maybe fileLength high or maybe invalid link"))
 	 break
-	case 'getmusic': {
-	let { yta } = require('./lib/y2mate')
-	if (!text) return reply(`Example : ${prefix + command} 1`)
-	if (!m.quoted) return reply('Reply Message')
-	if (!m.quoted.isBaileys) return reply(`Can only reply to messages from bots`)
-	let urls = quoted.text.match(new RegExp(/(?:https?:\/\/)?(?:youtu\.be\/|(?:www\.|m\.)?youtube\.com\/(?:watch|v|embed|shorts)(?:\.php)?(?:\?.*v=|\/))([a-zA-Z0-9\_-]+)/, 'gi'))
-	if (!urls) return reply(`Maybe The Message You Replied Does Not Contain Ytsearch Results`)
-	let quality = args[1] ? args[1] : '320kbps'
-	let media = await yta(urls[text - 1], quality)
-	if (media.filesize >= 999999) return reply('Audio size is too big '+util.format(media))
-	ser.sendImage(m.chat, media.thumb, `▢ Title : ${media.title}\n▢ File Size : ${media.filesizeF}\n▢ Url : ${isUrl(text)}\n▢ Ext : MP3\n▢ Resolution : ${args[1] || '320kbps'}`, m)
-	ser.sendMessage(m.chat, { audio: { url: media.dl_link }, mimetype: 'audio/mpeg', fileName: `${media.title}.mp3` }, { quoted: setQuoted })
-	}
-	break
-	case 'getvideo': {
-	let { ytv } = require('./lib/y2mate')
-	if (!text) return reply(`Example : ${prefix + command} 1`)
-	if (!m.quoted) return reply('Reply To A Message That Has Been Already Sent')
-	if (!m.quoted.isBaileys) return reply(`Hanya Bisa Membalas Pesan Dari Bot`)
-	let urls = quoted.text.match(new RegExp(/(?:https?:\/\/)?(?:youtu\.be\/|(?:www\.|m\.)?youtube\.com\/(?:watch|v|embed|shorts)(?:\.php)?(?:\?.*v=|\/))([a-zA-Z0-9\_-]+)/, 'gi'))
-	if (!urls) return reply(`Maybe the message you replied does not contain the ytsearch result`)
-	let quality = args[1] ? args[1] : '360p'
-	let media = await ytv(urls[text - 1], quality)
-	if (media.filesize >= 100000) return reply('File Over Limit '+util.format(media))
-	ser.sendMessage(m.chat, { video: { url: media.dl_link }, mimetype: 'video/mp4', fileName: `${media.title}.mp4`, caption: `▢ Title : ${media.title}\n▢ File Size : ${media.filesizeF}\n▢ Url : ${isUrl(text)}\n▢ Ext : MP3\n▢ Resolution : ${args[1] || '360p'}` }, { quoted: setQuoted })
-	}
-	break
 	case '3000years':
 	case 'approved':
 	case 'wanted':
@@ -2360,61 +2142,6 @@
 	headerType: 4
 	}
 	ser.sendMessage(m.chat, buttonMessage, { quoted: setQuoted })
-	}
-	break
-	case 'story':
-	case 'stories':
-	if(!text && !m.quoted) return reply("*Give me a url.*")
-	match = m.quoted ? m.quoted.text : text
-	if (
-	  match === "" ||
-	  (!match.includes("/stories/") && match.startsWith("http"))
-	)
-	  return reply("*Give me a url.*")
-	if (match.includes("/stories/")) {
-	  const s = match.indexOf("/stories/") + 9
-	  const e = match.lastIndexOf("/")
-	  match = match.substring(s, e)
-	}
-	if (match.includes("_Sending")) {
-	  const u = match.indexOf("of")
-	  const x = match.lastIndexOf("_")
-	  match = match.substring(u, x).replace('of ','')
-	   }
-	 res = await igstory(`${match}`)
-	if (res.error === 'No media found.') return m.reply("*No media found!*")
-	m.reply(`_Sending ${res.medias.length} stories of ${res.user.username}_`)
-	for(let i of res.medias){
-	if(i.url.includes('mp4')){
-	let link = await getBuffer(i.url)
-	let igpreview = await getBuffer(i.preview)
-	ser.sendMessage(m.chat, { video: link, jpegThumbnail: igpreview }, { quoted: m })
-	} else {
-	let link = await getBuffer(i.url)
-	let igpreview = await getBuffer(i.preview)
-	ser.sendMessage(m.chat, { image: link, jpegThumbnail: igpreview }, { quoted: m })
-	}
-	}
-	break
-	case 'igdl':
-	case 'instagram':
-	case 'insta':
-	if(!text && !m.quoted) return reply('*Enter the link!*')
-	link = m.quoted ? m.quoted.text : text
-	if (!link || !/instagram.com/.test(link))
-	return reply('*Enter the link!*')
-	 res = await igdl(`${link}`)
-	if (res.error === 'Invalid URL or token mismatch.') return m.reply("*No media found!*")
-	m.reply(`_Sending ${res.medias.length} Media of ${res.user.username}_`)
-	for(let i of res.medias){
-	if(i.url.includes('mp4')){
-	let link = await getBuffer(i.url)
-	let igpreview = await getBuffer(i.preview)
-	ser.sendMessage(m.chat, { video: link, jpegThumbnail: igpreview }, { quoted: m })
-	} else {
-	let link = await getBuffer(i.url)
-	ser.sendMessage(m.chat, { image: link, jpegThumbnail: link }, { quoted: m })
-	}
 	}
 	break
 	case 'ringtone': {
